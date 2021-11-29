@@ -1,0 +1,17 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+ .block-content{
+	display: flex;
+ }
+.blog-post-listing {
+	margin: 0 20px!important;
+    background-color: white!important;
+    padding: 10px 20px!important;
+    width: 33.33%;
+}
+.text-center{text-align: center;}
