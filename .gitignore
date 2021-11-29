@@ -16,7 +16,10 @@ node_modules/
 
 # Optional npm cache directory
 .npm
+<<<<<<< HEAD
 node_modules/.cache
+=======
+>>>>>>> 9e3492a093c82e9f72967e58ff4797415087105f
 
 # Optional eslint cache
 .eslintcache
@@ -25,4 +28,8 @@ node_modules/.cache
 *.tgz
 
 # dotenv environment variables file
+<<<<<<< HEAD
 .env
+=======
+.env
+>>>>>>> 9e3492a093c82e9f72967e58ff4797415087105f
