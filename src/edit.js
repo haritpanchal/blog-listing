@@ -3,8 +3,7 @@
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
  */
-import { __ } from '@wordpress/i18n';
-import apiFetch from '@wordpress/api-fetch';
+import { __ } from "@wordpress/i18n";
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -12,7 +11,7 @@ import apiFetch from '@wordpress/api-fetch';
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
  */
-import { useBlockProps } from '@wordpress/block-editor';
+import { useBlockProps } from "@wordpress/block-editor";
 const { Component } = wp.element;
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -20,7 +19,10 @@ const { Component } = wp.element;
  *
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
-import './editor.scss';
+import "./editor.scss";
+import apiFetch from "@wordpress/api-fetch";
+import Moment from "moment";
+const { RichText } = wp.blockEditor;
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -30,50 +32,69 @@ import './editor.scss';
  *
  * @return {WPElement} Element to render.
  */
-// export default function Edit(props) {
 
-// 	function componentDidMount(){
-// 		// console.log("here");
-// 		apiFetch( { path: '/wp/v2/posts' } ).then( posts => {
-// 			// const new_array = posts.map((posts) => {
-// 			// 	props.setAttributes( {categories : posts.categories})
-// 			// } )
-// 			props.setAttributes( {posts_array : posts})
-			
-// 		} );
-// 	}
+class BlockEdit extends Component {
+	componentDidMount() {
+		apiFetch({ path: "/wp/v2/posts" }).then((posts) => {
+			// const new_array = posts.map((posts) => {
+			// 	props.setAttributes( {categories : posts.categories})
+			// } )
+			this.props.setAttributes({ posts_array: posts });
+		});
+	}
 
-// 	componentDidMount();
+	render() {
+		const { attributes, setAttributes } = this.props;
+		const { posts_array } = this.props.attributes;
 
-// 	const { posts_array } = props.attributes;
-// 	// console.log(posts_array);
-// 	// var post_listing = posts_array.map(function(item){
-// 	// 	console.log(item);
-// 	// })
-// 	// var posts_array_listing  = posts_array.map(function(item){
-// 	// 	var post_id = item.id ? item.id : '';
-// 	// 	var post_date = item.date ? item.date : ''; 
-// 	// 	var main_title = item.title.rendered ? item.title.rendered : item.title;
-// 	// 	var post_excerpt = item.excerpt.rendered ? item.excerpt.rendered : item.excerpt;
-// 	// 	var clean_content = post_excerpt.replace(/(<([^>]+)>)/gi, "")
-// 	// 	var post_link = item.link;
+		if (posts_array) {
+			var back_listing = posts_array.map(function (item) {
+				var post_id = item.id ? item.id : "";
+				var post_date = item.date ? Moment(item.date).format("MM-DD-YYYY") : "";
+				var main_title = item.title.rendered ? item.title.rendered : item.title;
+				var post_excerpt = item.excerpt.rendered
+					? item.excerpt.rendered
+					: item.excerpt;
+				var clean_content = post_excerpt.replace(/(<([^>]+)>)/gi, "");
+				var post_link = item.link;
 
-// 	// 	return <div className='blog-post-listing'>
-//     //         <div class= "inner-wrapp" data-index={post_id}>
-// 	// 			<div class="title_wrapper">
-//     //             	<h5 id="main_header">{main_title}</h5>
-// 	// 			</div>
-// 	// 			<p class="post_date">{post_date}</p>
-// 	// 			<p class="content">{clean_content}</p>
-//     //             <a href = {post_link} class="post_link">Read More</a>
-//     //             {/* <p class="excerpt">{item.status}</p> */}
-//     //         </div>
-//     //     </div>
-//     // })
+				return (
+					<div className="back-blog-post-listing">
+						<div class="back-inner-wrapp" data-index={post_id}>
+							<div class="back-title_wrapper">
+								<h5 id="back_main_header">{main_title}</h5>
+							</div>
+							<p class="post_date">{post_date}</p>
+							<p class="content">{clean_content}</p>
+							<a href={post_link} class="post_link">
+								Read More
+							</a>
+						</div>
+					</div>
+				);
+			});
+		}
+		return (
+			<div>
+				<RichText
+					tagName="h2"
+					placeholder="Enter Blog Title"
+					className="text-center"
+					value={attributes.page_title}
+					onChange={(page_title) => setAttributes({ page_title })}
+					style={{
+						color: attributes.titleColor,
+						textAlign: attributes.textAlign,
+						fontSize: attributes.titleFontSize,
+					}}
+				/>
+				<div className="block-content">
+					<br />
+					{back_listing}
+				</div>
+			</div>
+		);
+	}
+}
 
-// 	return (
-// 		<p { ...useBlockProps() }>
-// 			{ __( 'Blog Listing – Blogs listed in Front', 'blog-listing' ) }
-// 		</p>
-// 	);
-// }
+export default BlockEdit;
