@@ -5,13 +5,27 @@
  * Replace them with your own styles or remove the file completely.
  */
 
- .block-content{
-	display: flex;
- }
+ 
 .blog-post-listing {
-	margin: 0 20px!important;
     background-color: white!important;
     padding: 10px 20px!important;
-    width: 33.33%;
+    margin-bottom: 20px;
+    margin-right: 10px;
+}
+.blog-post-listing:last-child{
+    margin-bottom: 0px;
+    margin-right: 0px;
+}
+.col-12{
+    width: 100%!important;
+}
+.col-6{
+    width: 48%!important;
+}
+.col-4{
+    width: 32%!important;
+}
+.col-3{
+    width: 24%!important;
 }
 .text-center{text-align: center;}

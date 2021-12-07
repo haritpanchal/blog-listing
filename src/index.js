@@ -70,6 +70,26 @@ registerBlockType("create-block/blog-listing", {
 			source: "html",
 			selector: "h2",
 		},
+		title_alignment:{
+			type: "string",
+			default: "none",
+		},
+		toolbar_show:{
+			type: "string",
+			default: "none"
+		},
+		toolbar_border:{
+			type: "string",
+			default: "none"
+		},
+		number_of_columns:{
+			type: "number",
+			default: 1,
+		},
+		column_class:{
+			type:"string",
+			default: "col-12"
+		},
 	},
 	edit: BlockEdit,
 

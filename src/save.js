@@ -6,6 +6,8 @@
 import { __ } from "@wordpress/i18n";
 import { RichText, useBlockProps } from "@wordpress/block-editor";
 import Moment from "moment";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 /**
  * React hook that is used to mark the block wrapper element.
  * It provides all the necessary props like the class name.
@@ -33,6 +35,8 @@ export default function save(props) {
 			: item.excerpt;
 		var clean_content = post_excerpt.replace(/(<([^>]+)>)/gi, "");
 		var post_link = item.link;
+		let column_class = props.attributes.column_class;
+
 		// var categories = item.categories ? item.categories : '';
 
 		// var category_listing = categories.map(function(item){
@@ -42,7 +46,7 @@ export default function save(props) {
 		// })
 
 		return (
-			<div className="blog-post-listing">
+			<div className={ column_class + " blog-post-listing"}>
 				<div class="inner-wrapp" data-index={post_id}>
 					<div class="title_wrapper">
 						<h5 id="main_header">{main_title}</h5>
@@ -66,7 +70,9 @@ export default function save(props) {
 				className="text-center"
 				value={props.attributes.page_title}
 			/>
-			<div class="block-content">{posts_array_listing}</div>
+			<div class="block-content container">
+				<div className="row">{posts_array_listing}</div>
+			</div>
 		</div>
 	);
 }
