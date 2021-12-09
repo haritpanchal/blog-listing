@@ -46,7 +46,7 @@ export default function save(props) {
 		// })
 
 		return (
-			<div className={ column_class + " blog-post-listing"}>
+			<div className={column_class + " blog-post-listing"}>
 				<div class="inner-wrapp" data-index={post_id}>
 					<div class="title_wrapper">
 						<h5 id="main_header">{main_title}</h5>

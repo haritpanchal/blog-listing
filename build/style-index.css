@@ -16,6 +16,11 @@
   margin-right: 0px;
 }
 
+.block-content .row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .col-12 {
   width: 100% !important;
 }

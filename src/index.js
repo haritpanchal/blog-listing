@@ -65,30 +65,64 @@ registerBlockType("create-block/blog-listing", {
 				},
 			},
 		},
+		post_types_array: {
+			type: "array",
+			source: "query",
+			query: {
+				name: {
+					type: "string",
+					source: "html",
+				},
+				rest_base: {
+					type: "string",
+					source: "html",
+				},
+			},
+		},
 		page_title: {
 			type: "string",
 			source: "html",
 			selector: "h2",
 		},
-		title_alignment:{
+		title_alignment: {
 			type: "string",
 			default: "none",
 		},
-		toolbar_show:{
+		toolbar_show: {
 			type: "string",
-			default: "none"
+			default: "none",
 		},
-		toolbar_border:{
+		toolbar_border: {
 			type: "string",
-			default: "none"
+			default: "none",
 		},
-		number_of_columns:{
+		number_of_columns: {
 			type: "number",
 			default: 1,
 		},
-		column_class:{
-			type:"string",
-			default: "col-12"
+		column_class: {
+			type: "string",
+			default: "col-12",
+		},
+		titleFontSize: {
+			type: "number",
+			default: 26,
+		},
+		descriptionFontSize: {
+			type: "number",
+			default: 14,
+		},
+		titleColor: {
+			type: "string",
+			default: "#333",
+		},
+		descriptionColor: {
+			type: "string",
+			default: "#333",
+		},
+		selected_type: {
+			type: "string",
+			default: "posts",
 		},
 	},
 	edit: BlockEdit,

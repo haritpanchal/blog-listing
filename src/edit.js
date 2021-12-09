@@ -4,8 +4,7 @@
  * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
  */
 import { __ } from "@wordpress/i18n";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import "bootstrap/dist/css/bootstrap.min.css";
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -16,31 +15,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {
 	useBlockProps,
 	BlockControls,
-	AlignmentToolbar,
+	ColorPalette,
 	InspectorControls,
 } from "@wordpress/block-editor";
 import {
 	PanelBody,
-	IconButton,
 	RangeControl,
-	FontSizePicker,
-} from "@wordpress/components";
-import {
+	DropdownMenu,
 	Toolbar,
 	ToolbarButton,
 	ToolbarGroup,
-	ToolbarDropdownMenu,
+	SelectControl,
+	Button,
 } from "@wordpress/components";
-import {
-	formatBold,
-	formatItalic,
-	more,
-	arrowLeft,
-	arrowRight,
-	arrowUp,
-	arrowDown,
-	trash,
-} from "@wordpress/icons";
+import { trash } from "@wordpress/icons";
 
 const { Component } = wp.element;
 /**
@@ -71,11 +59,17 @@ class BlockEdit extends Component {
 			// } )
 			this.props.setAttributes({ posts_array: posts });
 		});
+
+		apiFetch({ path: "/wp/v2/types" }).then((types) => {
+			this.props.setAttributes({ post_types_array: types });
+		});
 	}
 
 	render() {
 		const { attributes, setAttributes } = this.props;
 		const { posts_array } = this.props.attributes;
+		const { post_types_array } = this.props.attributes;
+		const post_types = post_types_array ? Object.values(post_types_array) : "";
 		if (posts_array) {
 			var back_listing = posts_array.map(function (item) {
 				var post_id = item.id ? item.id : "";
@@ -89,7 +83,7 @@ class BlockEdit extends Component {
 				let column_class = attributes.column_class;
 
 				return (
-					<div className={column_class + ' back-blog-post-listing'}>
+					<div className={column_class + " back-blog-post-listing"}>
 						<div class="back-inner-wrapp" data-index={post_id}>
 							<div class="back-title_wrapper">
 								<h5 id="back_main_header">{main_title}</h5>
@@ -104,9 +98,14 @@ class BlockEdit extends Component {
 				);
 			});
 		}
+		var type_dropdown = post_types
+			? post_types.map(function (type) {
+					return { value: type.rest_base, label: type.name };
+			  })
+			: "";
 
 		const changeNumberOfColumns = (newColumns) => {
-			let colClass = '';
+			let colClass = "";
 			switch (newColumns) {
 				case 1:
 					colClass = "col-12";
@@ -129,8 +128,7 @@ class BlockEdit extends Component {
 				column_class: colClass,
 			});
 		};
-
-		console.log(attributes.number_of_columns)
+		console.log(posts_array);
 		return (
 			<div
 			// onClick={() =>
@@ -142,7 +140,28 @@ class BlockEdit extends Component {
 			// style={{border: attributes.toolbar_border}}
 			>
 				<InspectorControls>
-					<PanelBody>
+					<PanelBody></PanelBody>
+					<PanelBody title={"Title Options"} initialOpen={false}>
+						<p>
+							<strong>Font Size</strong>
+						</p>
+						<RangeControl
+							value={attributes.titleFontSize}
+							onChange={(titleFontSize) => setAttributes({ titleFontSize })}
+							min={0}
+							max={100}
+							step={2}
+						/>
+						<p>
+							<strong>Color</strong>
+						</p>
+						<ColorPalette
+							value={attributes.titleColor}
+							onChange={(titleColor) => setAttributes({ titleColor })}
+						/>
+					</PanelBody>
+
+					<PanelBody title={"Blog Options"} initialOpen={false}>
 						<p>
 							<strong>Number of Columns</strong>
 						</p>
@@ -152,6 +171,43 @@ class BlockEdit extends Component {
 							min={1}
 							max={4}
 							step={1}
+						/>
+						<SelectControl
+							label="Size"
+							value={attributes.selected_type}
+							options={type_dropdown}
+							onChange={(newType) =>
+								setAttributes({
+									selected_type: newType,
+									//  posts_array: apiFetch({ path: "/wp/v2/"+ attributes.selected_type }).then((posts) => {
+									// 	// const new_array = posts.map((posts) => {
+									// 	// 	props.setAttributes( {categories : posts.categories})
+									// 	// } )
+									// 	this.props.setAttributes({ posts_array: posts });
+									// })
+								})
+							}
+						/>
+						<p>
+							<strong>Body Font Size</strong>
+						</p>
+						<RangeControl
+							value={attributes.descriptionFontSize}
+							onChange={(descriptionFontSize) =>
+								setAttributes({ descriptionFontSize })
+							}
+							min={0}
+							max={100}
+							step={2}
+						/>
+						<p>
+							<strong>Body Color</strong>
+						</p>
+						<ColorPalette
+							value={attributes.descriptionColor}
+							onChange={(descriptionColor) =>
+								setAttributes({ descriptionColor })
+							}
 						/>
 					</PanelBody>
 				</InspectorControls>

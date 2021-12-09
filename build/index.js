@@ -7930,7 +7930,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 const {
   Component
 } = wp.element;
@@ -7968,6 +7967,13 @@ class BlockEdit extends Component {
         posts_array: posts
       });
     });
+    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_7___default()({
+      path: "/wp/v2/types"
+    }).then(types => {
+      this.props.setAttributes({
+        post_types_array: types
+      });
+    });
   }
 
   render() {
@@ -7978,6 +7984,10 @@ class BlockEdit extends Component {
     const {
       posts_array
     } = this.props.attributes;
+    const {
+      post_types_array
+    } = this.props.attributes;
+    const post_types = post_types_array ? Object.values(post_types_array) : "";
 
     if (posts_array) {
       var back_listing = posts_array.map(function (item) {
@@ -7989,7 +7999,7 @@ class BlockEdit extends Component {
         var post_link = item.link;
         let column_class = attributes.column_class;
         return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-          className: column_class + ' back-blog-post-listing'
+          className: column_class + " back-blog-post-listing"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
           class: "back-inner-wrapp",
           "data-index": post_id
@@ -8008,8 +8018,15 @@ class BlockEdit extends Component {
       });
     }
 
+    var type_dropdown = post_types ? post_types.map(function (type) {
+      return {
+        value: type.rest_base,
+        label: type.name
+      };
+    }) : "";
+
     const changeNumberOfColumns = newColumns => {
-      let colClass = '';
+      let colClass = "";
 
       switch (newColumns) {
         case 1:
@@ -8038,13 +8055,58 @@ class BlockEdit extends Component {
       });
     };
 
-    console.log(attributes.number_of_columns);
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("strong", null, "Number of Columns")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["RangeControl"], {
+    console.log(posts_array);
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], {
+      title: "Title Options",
+      initialOpen: false
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("strong", null, "Font Size")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["RangeControl"], {
+      value: attributes.titleFontSize,
+      onChange: titleFontSize => setAttributes({
+        titleFontSize
+      }),
+      min: 0,
+      max: 100,
+      step: 2
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("strong", null, "Color")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["ColorPalette"], {
+      value: attributes.titleColor,
+      onChange: titleColor => setAttributes({
+        titleColor
+      })
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], {
+      title: "Blog Options",
+      initialOpen: false
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("strong", null, "Number of Columns")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["RangeControl"], {
       value: attributes.number_of_columns,
       onChange: changeNumberOfColumns,
       min: 1,
       max: 4,
       step: 1
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["SelectControl"], {
+      label: "Size",
+      value: attributes.selected_type,
+      options: type_dropdown,
+      onChange: newType => setAttributes({
+        selected_type: newType //  posts_array: apiFetch({ path: "/wp/v2/"+ attributes.selected_type }).then((posts) => {
+        // 	// const new_array = posts.map((posts) => {
+        // 	// 	props.setAttributes( {categories : posts.categories})
+        // 	// } )
+        // 	this.props.setAttributes({ posts_array: posts });
+        // })
+
+      })
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("strong", null, "Body Font Size")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["RangeControl"], {
+      value: attributes.descriptionFontSize,
+      onChange: descriptionFontSize => setAttributes({
+        descriptionFontSize
+      }),
+      min: 0,
+      max: 100,
+      step: 2
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("strong", null, "Body Color")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["ColorPalette"], {
+      value: attributes.descriptionColor,
+      onChange: descriptionColor => setAttributes({
+        descriptionColor
+      })
     }))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["Toolbar"], {
       label: "Options",
       style: {
@@ -8174,6 +8236,20 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
         }
       }
     },
+    post_types_array: {
+      type: "array",
+      source: "query",
+      query: {
+        name: {
+          type: "string",
+          source: "html"
+        },
+        rest_base: {
+          type: "string",
+          source: "html"
+        }
+      }
+    },
     page_title: {
       type: "string",
       source: "html",
@@ -8198,6 +8274,26 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
     column_class: {
       type: "string",
       default: "col-12"
+    },
+    titleFontSize: {
+      type: "number",
+      default: 26
+    },
+    descriptionFontSize: {
+      type: "number",
+      default: 14
+    },
+    titleColor: {
+      type: "string",
+      default: "#333"
+    },
+    descriptionColor: {
+      type: "string",
+      default: "#333"
+    },
+    selected_type: {
+      type: "string",
+      default: "posts"
     }
   },
   edit: _edit__WEBPACK_IMPORTED_MODULE_2__["default"],
