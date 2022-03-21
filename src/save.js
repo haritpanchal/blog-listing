@@ -36,7 +36,16 @@ export default function save(props) {
 		var clean_content = post_excerpt.replace(/(<([^>]+)>)/gi, "");
 		var post_link = item.link;
 		let column_class = props.attributes.column_class;
-
+		var descriptionFontSize = props.attributes.descriptionFontSize;
+		var blogTitleFontSize = props.attributes.blogTitleFontSize;
+		var blogTitleFontColor = props.attributes.blogTitleFontColor;
+		var descriptionColor = props.attributes.descriptionColor;
+		var titleColor = props.attributes.titleColor;
+		var post_content = item.content.rendered ? item.content.rendered : item.content ;
+		var content_type = (props.attributes.show_excerpt_content == 'excerpt') ? post_excerpt : post_content;
+		// console.log(item);
+		// console.log(item.content);
+		// console.log(item.content.rendered);
 		// var categories = item.categories ? item.categories : '';
 
 		// var category_listing = categories.map(function(item){
@@ -48,12 +57,14 @@ export default function save(props) {
 		return (
 			<div className={column_class + " blog-post-listing"}>
 				<div class="inner-wrapp" data-index={post_id}>
-					<div class="title_wrapper">
-						<h5 id="main_header">{main_title}</h5>
-					</div>
+					<a href={post_link}>
+						<div class="title_wrapper">
+							<h5 id="main_header" style={{fontSize:blogTitleFontSize, color:blogTitleFontColor}}>{main_title}</h5>
+						</div>
+					</a>
 					{/* <ul class="blog-cat-listing">{category_listing}</ul> */}
 					<p class="post_date">{post_date}</p>
-					<p class="content">{clean_content}</p>
+					<div class="content main_content" style={{fontSize:descriptionFontSize, color:descriptionColor}} dangerouslySetInnerHTML={{__html: content_type}}/>
 					<a href={post_link} class="post_link">
 						Read More
 					</a>
@@ -69,6 +80,7 @@ export default function save(props) {
 				tagName="h2"
 				className="text-center"
 				value={props.attributes.page_title}
+				style={{color: props.attributes.titleColor}}
 			/>
 			<div class="block-content container">
 				<div className="row">{posts_array_listing}</div>

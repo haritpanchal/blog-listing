@@ -57,6 +57,11 @@ registerBlockType("create-block/blog-listing", {
 					source: "html",
 					selector: ".content",
 				},
+				content: {
+					type: "string",
+					source: "html",
+					selector: ".main_content",
+				},
 				link: {
 					attribute: "href",
 					type: "string",
@@ -106,7 +111,11 @@ registerBlockType("create-block/blog-listing", {
 		},
 		titleFontSize: {
 			type: "number",
-			default: 26,
+			default: 22,
+		},
+		blogTitleFontSize: {
+			type: "number",
+			default: 22,
 		},
 		descriptionFontSize: {
 			type: "number",
@@ -116,9 +125,17 @@ registerBlockType("create-block/blog-listing", {
 			type: "string",
 			default: "#333",
 		},
+		blogTitleFontColor: {
+			type: "string",
+			default: "#333",
+		},
 		descriptionColor: {
 			type: "string",
 			default: "#333",
+		},
+		show_excerpt_content: {
+			type: "string",
+			default: 'content',
 		},
 		selected_type: {
 			type: "string",
