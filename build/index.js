@@ -7960,10 +7960,9 @@ class BlockEdit extends Component {
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_7___default()({
       path: "/wp/v2/posts?per_page=1"
     }).then(posts => {
-      console.log(posts); // const new_array = posts.map((posts) => {
+      // const new_array = posts.map((posts) => {
       // 	props.setAttributes( {categories : posts.categories})
       // } )
-
       this.props.setAttributes({
         posts_array: posts
       });
@@ -7994,7 +7993,7 @@ class BlockEdit extends Component {
       var back_listing = posts_array.map(function (item) {
         // console.log(item.content.rendered);
         var post_id = item.id ? item.id : "";
-        var post_date = item.date ? moment__WEBPACK_IMPORTED_MODULE_8___default()(item.date).format("MM-DD-YYYY") : "";
+        var post_date = item.date ? moment__WEBPACK_IMPORTED_MODULE_8___default()(item.date).format(attributes.date_format) : "";
         var main_title = item.title.rendered ? item.title.rendered : item.title;
         var show_excerpt_content = attributes.show_excerpt_content;
         var post_excerpt = item.excerpt.rendered ? item.excerpt.rendered : item.excerpt;
@@ -8007,7 +8006,14 @@ class BlockEdit extends Component {
         var blogTitleFontSize = attributes.blogTitleFontSize;
         var blogTitleFontColor = attributes.blogTitleFontColor;
         var descriptionColor = attributes.descriptionColor;
-        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+        var readmore_target = attributes.readmore_newtab ? '__blank' : ''; // var image_id = item.featured_media ? item.featured_media : '';
+        // console.log(image_id);
+        // var imageObj = wp.data.select('core').getMedia(image_id) ? wp.data.select('core').getMedia(image_id) : '';
+        // console.log(imageObj);
+        // var image_url = imageObj.source_url ? imageObj.source_url : ''; 
+        // console.log(image_url);
+
+        return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
           className: column_class + " back-blog-post-listing"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
           class: "back-inner-wrapp",
@@ -8023,9 +8029,9 @@ class BlockEdit extends Component {
             fontSize: blogTitleFontSize,
             color: blogTitleFontColor
           }
-        }, main_title))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", {
+        }, main_title))), attributes.show_date ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", {
           class: "post_date"
-        }, post_date), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+        }, post_date) : '', Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
           class: "content",
           style: {
             fontSize: descriptionFontSize,
@@ -8034,10 +8040,11 @@ class BlockEdit extends Component {
           dangerouslySetInnerHTML: {
             __html: clean_content
           }
-        }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+        }), attributes.show_readmore ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
           href: post_link,
-          class: "post_link"
-        }, "Read More")));
+          class: "post_link",
+          target: readmore_target
+        }, attributes.custom_readmore_text) : '')));
       });
     }
 
@@ -8113,8 +8120,9 @@ class BlockEdit extends Component {
       size: 22
     }];
     const fallbackFontSize = 18;
+    const today_date = new Date();
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], {
-      title: "Title Options",
+      title: "Title",
       initialOpen: true
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["FontSizePicker"], {
       fontSizes: fontSizes,
@@ -8129,7 +8137,7 @@ class BlockEdit extends Component {
         titleColor
       })
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], {
-      title: "Blog Design",
+      title: "Design",
       initialOpen: false
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("strong", null, "Number of Columns")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["RangeControl"], {
       value: attributes.number_of_columns,
@@ -8162,19 +8170,74 @@ class BlockEdit extends Component {
         descriptionColor
       })
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], {
-      title: "Blog Content",
+      title: "Content",
       initialOpen: false
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Show Content/excerpt?"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalRadioGroup"], {
-      label: "Width",
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Show Content/Excerpt?"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalToggleGroupControl"], {
+      isBlock: true,
+      value: attributes.show_excerpt_content,
       onChange: show_excerpt_content => setAttributes({
         show_excerpt_content
-      }),
-      checked: attributes.show_excerpt_content
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalRadio"], {
-      value: "excerpt"
-    }, "Excerpt"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalRadio"], {
-      value: "content"
-    }, "Content")))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(RichText, {
+      })
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalToggleGroupControlOption"], {
+      value: "excerpt",
+      label: "Excerpt"
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalToggleGroupControlOption"], {
+      value: "content",
+      label: "Content"
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["ToggleControl"], {
+      label: "Show Date?" // help={
+      // 	attributes.show_date
+      // 		? 'Show Date'
+      // 		: 'Hide Date'
+      // }
+      ,
+      checked: attributes.show_date,
+      onChange: show_date => setAttributes({
+        show_date
+      })
+    }), attributes.show_date ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["SelectControl"], {
+      label: "Date Format",
+      value: attributes.date_format,
+      options: [{
+        label: moment__WEBPACK_IMPORTED_MODULE_8___default()(today_date).format("MM-DD-YY"),
+        value: 'MM-DD-YY'
+      }, {
+        label: moment__WEBPACK_IMPORTED_MODULE_8___default()(today_date).format("YYYY-MM-DD"),
+        value: 'YYYY-MM-DD'
+      }, {
+        label: moment__WEBPACK_IMPORTED_MODULE_8___default()(today_date).format("DD/MM/YY"),
+        value: 'DD/MM/YY'
+      }, {
+        label: moment__WEBPACK_IMPORTED_MODULE_8___default()(today_date).format("MMM DD, YYYY"),
+        value: 'MMM DD, YYYY'
+      }],
+      onChange: date_format => setAttributes({
+        date_format
+      })
+    })) : '', Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["ToggleControl"], {
+      label: "Show Read More?" // help={
+      // 	attributes.show_readmore
+      // 		? 'Show Read More'
+      // 		: 'Hide Read More'
+      // }
+      ,
+      checked: attributes.show_readmore,
+      onChange: show_readmore => setAttributes({
+        show_readmore
+      })
+    }), attributes.show_readmore ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["ToggleControl"], {
+      label: "Open in new tab?",
+      checked: attributes.readmore_newtab,
+      onChange: readmore_newtab => setAttributes({
+        readmore_newtab
+      })
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
+      label: "Custom \"Read More\" text",
+      value: attributes.custom_readmore_text,
+      onChange: custom_readmore_text => setAttributes({
+        custom_readmore_text
+      })
+    })) : '')), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(RichText, {
       tagName: "h2",
       placeholder: "Enter Blog Title",
       className: "text-center",
@@ -8366,6 +8429,26 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
       type: "string",
       default: 'content'
     },
+    show_date: {
+      type: "boolean",
+      default: true
+    },
+    date_format: {
+      type: "string",
+      default: "MM-DD-YY"
+    },
+    show_readmore: {
+      type: "boolean",
+      default: true
+    },
+    custom_readmore_text: {
+      type: "string",
+      default: "Read More"
+    },
+    readmore_newtab: {
+      type: "boolean",
+      default: false
+    },
     selected_type: {
       type: "string",
       default: "posts"
@@ -8434,7 +8517,8 @@ function save(props) {
   } = props.attributes;
   var posts_array_listing = posts_array.map(function (item) {
     var post_id = item.id ? item.id : "";
-    var post_date = item.date ? moment__WEBPACK_IMPORTED_MODULE_3___default()(item.date).format("MM-DD-YYYY") : "";
+    var post_date = item.date ? moment__WEBPACK_IMPORTED_MODULE_3___default()(item.date).format(props.attributes.date_format) : "";
+    console.log(post_date);
     var main_title = item.title.rendered ? item.title.rendered : item.title;
     var post_excerpt = item.excerpt.rendered ? item.excerpt.rendered : item.excerpt;
     var clean_content = post_excerpt.replace(/(<([^>]+)>)/gi, "");
@@ -8446,7 +8530,8 @@ function save(props) {
     var descriptionColor = props.attributes.descriptionColor;
     var titleColor = props.attributes.titleColor;
     var post_content = item.content.rendered ? item.content.rendered : item.content;
-    var content_type = props.attributes.show_excerpt_content == 'excerpt' ? post_excerpt : post_content; // console.log(item);
+    var content_type = props.attributes.show_excerpt_content == 'excerpt' ? post_excerpt : post_content;
+    var readmore_target = props.attributes.readmore_newtab ? '__blank' : ''; // console.log(item);
     // console.log(item.content);
     // console.log(item.content.rendered);
     // var categories = item.categories ? item.categories : '';
@@ -8462,7 +8547,8 @@ function save(props) {
       class: "inner-wrapp",
       "data-index": post_id
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
-      href: post_link
+      href: post_link,
+      class: "post_link"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       class: "title_wrapper"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h5", {
@@ -8471,9 +8557,9 @@ function save(props) {
         fontSize: blogTitleFontSize,
         color: blogTitleFontColor
       }
-    }, main_title))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", {
+    }, main_title))), props.attributes.show_date ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", {
       class: "post_date"
-    }, post_date), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    }, post_date) : '', Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       class: "content main_content",
       style: {
         fontSize: descriptionFontSize,
@@ -8482,10 +8568,12 @@ function save(props) {
       dangerouslySetInnerHTML: {
         __html: content_type
       }
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+    }), props.attributes.show_readmore ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
       href: post_link,
-      class: "post_link"
-    }, "Read More")));
+      class: "post_link",
+      target: readmore_target,
+      rel: "noopener"
+    }, props.attributes.custom_readmore_text) : ''));
   });
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
     tagName: "h2",

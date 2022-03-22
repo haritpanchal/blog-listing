@@ -137,6 +137,26 @@ registerBlockType("create-block/blog-listing", {
 			type: "string",
 			default: 'content',
 		},
+		show_date: {
+			type: "boolean",
+			default: true,
+		},
+		date_format: {
+			type: "string",
+			default: "MM-DD-YY",	
+		},
+		show_readmore: {
+			type: "boolean",
+			default: true,
+		},
+		custom_readmore_text: {
+			type: "string",
+			default: "Read More"
+		},
+	    readmore_newtab: {
+			type: "boolean",
+			default: false,
+		},
 		selected_type: {
 			type: "string",
 			default: "posts",

@@ -31,9 +31,13 @@ import {
 	ToolbarGroup,
 	SelectControl,
 	Button,
+	ToggleControl,
 	FontSizePicker,
 	__experimentalRadio as Radio,
 	__experimentalRadioGroup as RadioGroup,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+	TextControl,
 } from "@wordpress/components";
 import { trash } from "@wordpress/icons";
 
@@ -61,7 +65,6 @@ const { RichText } = wp.blockEditor;
 class BlockEdit extends Component {
 	componentDidMount() {
 		apiFetch({ path: "/wp/v2/posts?per_page=1" }).then((posts) => {
-			console.log(posts);
 			// const new_array = posts.map((posts) => {
 			// 	props.setAttributes( {categories : posts.categories})
 			// } )
@@ -83,7 +86,7 @@ class BlockEdit extends Component {
 			var back_listing = posts_array.map(function (item) {
 				// console.log(item.content.rendered);
 				var post_id = item.id ? item.id : "";
-				var post_date = item.date ? Moment(item.date).format("MM-DD-YYYY") : "";
+				var post_date = item.date ? Moment(item.date).format(attributes.date_format) : "";
 				var main_title = item.title.rendered ? item.title.rendered : item.title;
 				var show_excerpt_content = attributes.show_excerpt_content;
 				var post_excerpt = item.excerpt.rendered
@@ -98,8 +101,15 @@ class BlockEdit extends Component {
 				var blogTitleFontSize = attributes.blogTitleFontSize;
 				var blogTitleFontColor = attributes.blogTitleFontColor;
 				var descriptionColor = attributes.descriptionColor;
-
+				var readmore_target = (attributes.readmore_newtab) ? '__blank' : ''; 
+				// var image_id = item.featured_media ? item.featured_media : '';
+				// console.log(image_id);
+				// var imageObj = wp.data.select('core').getMedia(image_id) ? wp.data.select('core').getMedia(image_id) : '';
+				// console.log(imageObj);
+				// var image_url = imageObj.source_url ? imageObj.source_url : ''; 
+				// console.log(image_url);
 				return (
+					<>
 					<div className={column_class + " back-blog-post-listing"}>
 						<div class="back-inner-wrapp" data-index={post_id}>
 							<a href={post_link} class="post_link">
@@ -107,13 +117,30 @@ class BlockEdit extends Component {
 									<h5 id="back_main_header" style={{fontSize:blogTitleFontSize, color:blogTitleFontColor}}>{main_title}</h5>
 								</div>
 							</a>
-							<p class="post_date">{post_date}</p>
+							{
+								attributes.show_date 
+									? 
+									<p class="post_date">{post_date}</p>
+									: 
+									''
+							}
+							
+							<div>
+								{/* <img src={image_url} /> */}
+							</div>
 							<div class="content" style={{fontSize:descriptionFontSize, color:descriptionColor}} dangerouslySetInnerHTML={{__html: clean_content}}/>
-							<a href={post_link} class="post_link">
-								Read More
-							</a>
+							{
+								attributes.show_readmore 
+									? 
+									<a href={post_link} class="post_link" target={readmore_target}>
+										{attributes.custom_readmore_text}
+									</a>  
+									: 
+									''
+							}
 						</div>
 					</div>
+					</>
 				);
 			});
 		}
@@ -192,6 +219,7 @@ class BlockEdit extends Component {
 			},
 		];
 		const fallbackFontSize = 18;
+		const today_date = new Date();
 		
 		return (
 			<div
@@ -204,7 +232,7 @@ class BlockEdit extends Component {
 			// style={{border: attributes.toolbar_border}}
 			>
 				<InspectorControls>
-					<PanelBody title={"Title Options"} initialOpen={true}>
+					<PanelBody title={"Title"} initialOpen={true}>
 						{/* <RangeControl
 							value={attributes.titleFontSize}
 							onChange={(titleFontSize) => setAttributes({ titleFontSize })}
@@ -227,7 +255,7 @@ class BlockEdit extends Component {
 						/>
 					</PanelBody>
 
-					<PanelBody title={"Blog Design"} initialOpen={false}>
+					<PanelBody title={"Design"} initialOpen={false}>
 						<PanelRow>
 							<strong>Number of Columns</strong>
 						</PanelRow>
@@ -303,15 +331,80 @@ class BlockEdit extends Component {
 								setAttributes({ descriptionColor })
 							}
 						/>
-
-						
 					</PanelBody>
-					<PanelBody title={"Blog Content"} initialOpen={false}>
-						<p>Show Content/excerpt?</p>
-						<RadioGroup label="Width" onChange={(show_excerpt_content) => setAttributes({ show_excerpt_content })} checked= {attributes.show_excerpt_content}>
+					<PanelBody title={"Content"} initialOpen={false}>
+						<p>Show Content/Excerpt?</p>
+						{/* <RadioGroup label="Width" onChange={(show_excerpt_content) => setAttributes({ show_excerpt_content })} checked= {attributes.show_excerpt_content}>
 							<Radio value="excerpt">Excerpt</Radio>
 							<Radio value="content">Content</Radio>
-						</RadioGroup>
+						</RadioGroup> */}
+						<ToggleGroupControl isBlock value={attributes.show_excerpt_content} onChange={(show_excerpt_content) => setAttributes({ show_excerpt_content })} >
+							<ToggleGroupControlOption value='excerpt' label="Excerpt" />
+							<ToggleGroupControlOption value='content' label="Content" />
+						</ToggleGroupControl>
+						<ToggleControl
+							label="Show Date?"
+							// help={
+							// 	attributes.show_date
+							// 		? 'Show Date'
+							// 		: 'Hide Date'
+							// }
+							checked={ attributes.show_date }
+							onChange={(show_date) =>
+								setAttributes({ show_date })
+							}
+						/>
+						{
+							attributes.show_date 
+							?
+							<>
+								<SelectControl 
+									label="Date Format"
+									value={ attributes.date_format }
+									options={ [
+										{ label: Moment(today_date).format("MM-DD-YY"), value:'MM-DD-YY' },
+										{ label: Moment(today_date).format("YYYY-MM-DD"), value:'YYYY-MM-DD' },
+										{ label: Moment(today_date).format("DD/MM/YY"), value:'DD/MM/YY' },
+										{ label: Moment(today_date).format("MMM DD, YYYY"), value:'MMM DD, YYYY' },
+									] }
+									onChange={ ( date_format ) => setAttributes({date_format}) }
+								/>
+							</>
+							: 
+							'' 
+						}
+						<ToggleControl
+							label="Show Read More?"
+							// help={
+							// 	attributes.show_readmore
+							// 		? 'Show Read More'
+							// 		: 'Hide Read More'
+							// }
+							checked={ attributes.show_readmore }
+							onChange={(show_readmore) =>
+								setAttributes({ show_readmore })
+							}
+						/>
+						{
+							attributes.show_readmore 
+							?
+							<>
+								<ToggleControl
+								label="Open in new tab?"
+								checked={ attributes.readmore_newtab }
+								onChange={(readmore_newtab) =>
+									setAttributes({ readmore_newtab })
+								}
+								/>
+								<TextControl
+									label='Custom "Read More" text'
+									value={ attributes.custom_readmore_text }
+									onChange={ ( custom_readmore_text ) =>  setAttributes({ custom_readmore_text })}
+								/>
+							</>
+							: 
+							'' 
+						}
 					</PanelBody>
 				</InspectorControls>
 				{/* <Toolbar label="Options" style={{ display: attributes.toolbar_show }}>
