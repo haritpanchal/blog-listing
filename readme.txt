@@ -1,5 +1,5 @@
 === Blog Listing ===
-Contributors:      The WordPress Contributors
+Contributors:      Harit Panchal
 Tags:              block
 Tested up to:      5.7.0
 Stable tag:        0.1.0
