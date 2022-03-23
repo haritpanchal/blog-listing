@@ -29,7 +29,6 @@ export default function save(props) {
 	var posts_array_listing = posts_array.map(function (item) {
 		var post_id = item.id ? item.id : "";
 		var post_date = item.date ? Moment(item.date).format(props.attributes.date_format) : "";
-		console.log(post_date);
 		var main_title = item.title.rendered ? item.title.rendered : item.title;
 		var post_excerpt = item.excerpt.rendered
 			? item.excerpt.rendered

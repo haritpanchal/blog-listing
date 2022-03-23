@@ -5,7 +5,6 @@
  */
 import { __ } from "@wordpress/i18n";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 /**
  * React hook that is used to mark the block wrapper element.
  * It provides all the necessary props like the class name.
@@ -64,34 +63,35 @@ const { RichText } = wp.blockEditor;
 
 class BlockEdit extends Component {
 	componentDidMount() {
-		apiFetch({ path: "/wp/v2/posts?per_page=1" }).then((posts) => {
+		apiFetch({ path: "/wp/v2/"+this.props.attributes.selected_type }).then((posts) => {
 			// const new_array = posts.map((posts) => {
 			// 	props.setAttributes( {categories : posts.categories})
 			// } )
 			this.props.setAttributes({ posts_array: posts });
 		});
-
 		apiFetch({ path: "/wp/v2/types" }).then((types) => {
 			this.props.setAttributes({ post_types_array: types });
 		});
 	}
-
+	
 	render() {
 		const { attributes, setAttributes } = this.props;
 		const { posts_array } = this.props.attributes;
 		const { post_types_array } = this.props.attributes;
-		
 		const post_types = post_types_array ? Object.values(post_types_array) : "";
 		if (posts_array) {
 			var back_listing = posts_array.map(function (item) {
-				// console.log(item.content.rendered);
 				var post_id = item.id ? item.id : "";
+				
 				var post_date = item.date ? Moment(item.date).format(attributes.date_format) : "";
 				var main_title = item.title.rendered ? item.title.rendered : item.title;
 				var show_excerpt_content = attributes.show_excerpt_content;
-				var post_excerpt = item.excerpt.rendered
-				? item.excerpt.rendered
-				: item.excerpt;
+				if(item.post_excerpt){
+					var post_excerpt = item.excerpt.rendered
+					? item.excerpt.rendered
+					: item.excerpt;
+
+				}
 				var post_content = item.content ? item.content.rendered : item.content ;
 				var content_type = (show_excerpt_content == 'excerpt') ? post_excerpt : post_content;
 				var clean_content = content_type;
@@ -102,12 +102,8 @@ class BlockEdit extends Component {
 				var blogTitleFontColor = attributes.blogTitleFontColor;
 				var descriptionColor = attributes.descriptionColor;
 				var readmore_target = (attributes.readmore_newtab) ? '__blank' : ''; 
-				// var image_id = item.featured_media ? item.featured_media : '';
-				// console.log(image_id);
-				// var imageObj = wp.data.select('core').getMedia(image_id) ? wp.data.select('core').getMedia(image_id) : '';
-				// console.log(imageObj);
-				// var image_url = imageObj.source_url ? imageObj.source_url : ''; 
-				// console.log(image_url);
+				var categories = item.categories ? item.categories : '';
+				
 				return (
 					<>
 					<div className={column_class + " back-blog-post-listing"}>
@@ -144,12 +140,12 @@ class BlockEdit extends Component {
 				);
 			});
 		}
-		var type_dropdown = post_types
-			? post_types.map(function (type) {
-					return { value: type.rest_base, label: type.name };
-			  })
-			: "";
-
+			var type_dropdown = post_types
+				? post_types.map(function (type) {
+						return { value: type.rest_base, label: type.name };
+				})
+				: "";
+		
 		const changeNumberOfColumns = (newColumns) => {
 			let colClass = "";
 			switch (newColumns) {
@@ -220,7 +216,7 @@ class BlockEdit extends Component {
 		];
 		const fallbackFontSize = 18;
 		const today_date = new Date();
-		
+
 		return (
 			<div
 			// onClick={() =>
@@ -268,20 +264,26 @@ class BlockEdit extends Component {
 						/>
 						
 						{/* <SelectControl
-							label="Size"
+							label="Post Types"
 							value={attributes.selected_type}
 							options={type_dropdown}
-							onChange={(newType) =>
-								setAttributes({
-									selected_type: newType,
-									//  posts_array: apiFetch({ path: "/wp/v2/"+ attributes.selected_type }).then((posts) => {
-									// 	// const new_array = posts.map((posts) => {
-									// 	// 	props.setAttributes( {categories : posts.categories})
-									// 	// } )
-									// 	this.props.setAttributes({ posts_array: posts });
-									// })
-								})
-							}
+							// onChange={(newType) =>
+							// 	setAttributes({
+							// 		selected_type: newType,
+							// 		posts_array: apiFetch({ path: "/wp/v2/"+newType }).then((posts) => {
+							// 			// const new_array = posts.map((posts) => {
+							// 			// 	props.setAttributes( {categories : posts.categories})
+							// 			// } )
+							// 			this.props.setAttributes({ posts_array: posts });
+							// 		})
+							// 	})
+							// }
+							onChange={(newType) => apiFetch({ path: "/wp/v2/"+newType }).then((posts) => {
+								// const new_array = posts.map((posts) => {
+								// 	props.setAttributes( {categories : posts.categories})
+								// } )
+								this.props.setAttributes({ selected_type: newType , posts_array: posts});
+							})}
 						/> */}
 						<PanelRow>
 							<strong>Blog Title</strong>

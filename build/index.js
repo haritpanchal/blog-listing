@@ -7958,7 +7958,7 @@ const {
 class BlockEdit extends Component {
   componentDidMount() {
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_7___default()({
-      path: "/wp/v2/posts?per_page=1"
+      path: "/wp/v2/" + this.props.attributes.selected_type
     }).then(posts => {
       // const new_array = posts.map((posts) => {
       // 	props.setAttributes( {categories : posts.categories})
@@ -7991,12 +7991,15 @@ class BlockEdit extends Component {
 
     if (posts_array) {
       var back_listing = posts_array.map(function (item) {
-        // console.log(item.content.rendered);
         var post_id = item.id ? item.id : "";
         var post_date = item.date ? moment__WEBPACK_IMPORTED_MODULE_8___default()(item.date).format(attributes.date_format) : "";
         var main_title = item.title.rendered ? item.title.rendered : item.title;
         var show_excerpt_content = attributes.show_excerpt_content;
-        var post_excerpt = item.excerpt.rendered ? item.excerpt.rendered : item.excerpt;
+
+        if (item.post_excerpt) {
+          var post_excerpt = item.excerpt.rendered ? item.excerpt.rendered : item.excerpt;
+        }
+
         var post_content = item.content ? item.content.rendered : item.content;
         var content_type = show_excerpt_content == 'excerpt' ? post_excerpt : post_content;
         var clean_content = content_type;
@@ -8006,13 +8009,8 @@ class BlockEdit extends Component {
         var blogTitleFontSize = attributes.blogTitleFontSize;
         var blogTitleFontColor = attributes.blogTitleFontColor;
         var descriptionColor = attributes.descriptionColor;
-        var readmore_target = attributes.readmore_newtab ? '__blank' : ''; // var image_id = item.featured_media ? item.featured_media : '';
-        // console.log(image_id);
-        // var imageObj = wp.data.select('core').getMedia(image_id) ? wp.data.select('core').getMedia(image_id) : '';
-        // console.log(imageObj);
-        // var image_url = imageObj.source_url ? imageObj.source_url : ''; 
-        // console.log(image_url);
-
+        var readmore_target = attributes.readmore_newtab ? '__blank' : '';
+        var categories = item.categories ? item.categories : '';
         return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
           className: column_class + " back-blog-post-listing"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
@@ -8518,7 +8516,6 @@ function save(props) {
   var posts_array_listing = posts_array.map(function (item) {
     var post_id = item.id ? item.id : "";
     var post_date = item.date ? moment__WEBPACK_IMPORTED_MODULE_3___default()(item.date).format(props.attributes.date_format) : "";
-    console.log(post_date);
     var main_title = item.title.rendered ? item.title.rendered : item.title;
     var post_excerpt = item.excerpt.rendered ? item.excerpt.rendered : item.excerpt;
     var clean_content = post_excerpt.replace(/(<([^>]+)>)/gi, "");
