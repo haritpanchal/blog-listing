@@ -1,10 +1,10 @@
 {
 	"apiVersion": 2,
 	"name": "create-block/blog-listing",
-	"title": "Blog Listing",
+	"title": "Blog Listing Block",
 	"category": "widgets",
-	"icon": "smiley",
-	"description": "Example block written with ESNext standard and JSX support – build step required.",
+	"icon": "list-view",
+	"description": "Gutenberg Block to list posts and custom post types.",
 	"supports": {
 		"html": false
 	},

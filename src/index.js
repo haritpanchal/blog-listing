@@ -20,8 +20,6 @@ import "./style.scss";
 import BlockEdit from "./edit";
 import save from "./save";
 
-// const { ToggleControl, PanelBody, PanelRow, CheckboxControl, SelectControl, ColorPicker, Toolbar, IconButton } = wp.components;
-
 /**
  * Every block starts by registering a new block type definition.
  *
@@ -34,6 +32,7 @@ registerBlockType("create-block/blog-listing", {
 	attributes: {
 		posts_array: {
 			type: "array",
+			icon: 'list-view',
 			source: "query",
 			selector: ".blog-post-listing",
 			query: {
@@ -129,6 +128,14 @@ registerBlockType("create-block/blog-listing", {
 			type: "string",
 			default: "#333",
 		},
+		blogTitleLink: {
+			type: "boolean",
+			default: true,
+		},
+		blogTitleLinkNewTab: {
+			type: "boolean",
+			default: true,
+		},
 		descriptionColor: {
 			type: "string",
 			default: "#333",
@@ -161,6 +168,14 @@ registerBlockType("create-block/blog-listing", {
 			type: "string",
 			default: "posts",
 		},
+		blog_view: {
+			type: "string",
+			default: "list"
+		},
+		numberofPosts: {
+			type: "number",
+			default: 10,
+		}
 	},
 	edit: BlockEdit,
 

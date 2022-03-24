@@ -13,7 +13,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
  */
 import {
 	useBlockProps,
-	BlockControls,
 	ColorPalette,
 	InspectorControls,
 } from "@wordpress/block-editor";
@@ -21,15 +20,9 @@ import {
 
 import {
 	PanelBody,
-	PanelRow,
-	PanelHeader,
 	RangeControl,
-	DropdownMenu,
-	Toolbar,
-	ToolbarButton,
-	ToolbarGroup,
 	SelectControl,
-	Button,
+	__experimentalDivider as Divider,
 	ToggleControl,
 	FontSizePicker,
 	__experimentalRadio as Radio,
@@ -37,16 +30,10 @@ import {
 	__experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 	TextControl,
+	__experimentalNumberControl as NumberControl,
 } from "@wordpress/components";
-import { trash } from "@wordpress/icons";
 
 const { Component } = wp.element;
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * Those files can contain any CSS code that gets applied to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
- */
 import "./editor.scss";
 import apiFetch from "@wordpress/api-fetch";
 import Moment from "moment";
@@ -63,10 +50,7 @@ const { RichText } = wp.blockEditor;
 
 class BlockEdit extends Component {
 	componentDidMount() {
-		apiFetch({ path: "/wp/v2/"+this.props.attributes.selected_type }).then((posts) => {
-			// const new_array = posts.map((posts) => {
-			// 	props.setAttributes( {categories : posts.categories})
-			// } )
+		apiFetch({ path: "/wp/v2/"+this.props.attributes.selected_type+'/?per_page='+this.props.attributes.numberofPosts }).then((posts) => {
 			this.props.setAttributes({ posts_array: posts });
 		});
 		apiFetch({ path: "/wp/v2/types" }).then((types) => {
@@ -75,77 +59,77 @@ class BlockEdit extends Component {
 	}
 	
 	render() {
-		const { attributes, setAttributes } = this.props;
-		const { posts_array } = this.props.attributes;
-		const { post_types_array } = this.props.attributes;
-		const post_types = post_types_array ? Object.values(post_types_array) : "";
+		const { attributes, setAttributes } 	= this.props;
+		const { posts_array } 					= this.props.attributes;
+		const { post_types_array } 				= this.props.attributes;
+		const post_types 						= post_types_array ? Object.values(post_types_array) : "";
+		
 		if (posts_array) {
-			var back_listing = posts_array.map(function (item) {
-				var post_id = item.id ? item.id : "";
-				
-				var post_date = item.date ? Moment(item.date).format(attributes.date_format) : "";
-				var main_title = item.title.rendered ? item.title.rendered : item.title;
-				var show_excerpt_content = attributes.show_excerpt_content;
-				if(item.post_excerpt){
-					var post_excerpt = item.excerpt.rendered
-					? item.excerpt.rendered
-					: item.excerpt;
-
-				}
-				var post_content = item.content ? item.content.rendered : item.content ;
-				var content_type = (show_excerpt_content == 'excerpt') ? post_excerpt : post_content;
-				var clean_content = content_type;
-				var post_link = item.link;
-				let column_class = attributes.column_class;
-				var descriptionFontSize = attributes.descriptionFontSize;
-				var blogTitleFontSize = attributes.blogTitleFontSize;
-				var blogTitleFontColor = attributes.blogTitleFontColor;
-				var descriptionColor = attributes.descriptionColor;
-				var readmore_target = (attributes.readmore_newtab) ? '__blank' : ''; 
+			var back_listing = posts_array ? posts_array.map(function (item) {
+				var post_id 				= item.id ? item.id : "";
+				var post_date	 			= item.date ? Moment(item.date).format(attributes.date_format) : "";
+				var main_title 				= item.title.rendered ? item.title.rendered : item.title;
+				var show_excerpt_content 	= attributes.show_excerpt_content;
+				var post_excerpt 			= item.excerpt.rendered ? item.excerpt.rendered : item.excerpt;
+				var post_content 			= item.content ? item.content.rendered : item.content ;
+				var content_type 			= (show_excerpt_content == 'excerpt') ? post_excerpt : post_content;
+				var clean_content			= content_type;
+				var post_link 				= item.link;
+				let column_class			= attributes.column_class;
+				var descriptionFontSize 	= attributes.descriptionFontSize;
+				var blogTitleFontSize 		= attributes.blogTitleFontSize;
+				var blogTitleFontColor 		= attributes.blogTitleFontColor;
+				var descriptionColor 		= attributes.descriptionColor;
+				var readmore_target 		= (attributes.readmore_newtab) ? '__blank' : ''; 
+				var blogTitleLinkNewTab 	= (attributes.blogTitleLinkNewTab) ? '__blank' : ''; 
 				var categories = item.categories ? item.categories : '';
 				
 				return (
 					<>
 					<div className={column_class + " back-blog-post-listing"}>
 						<div class="back-inner-wrapp" data-index={post_id}>
-							<a href={post_link} class="post_link">
+							{
+								attributes.blogTitleLink 
+								? 
+								<a href={post_link} class="post_link" target={blogTitleLinkNewTab}>
+									<div class="back-title_wrapper">
+										<h5 id="back_main_header" style={{fontSize:blogTitleFontSize, color:blogTitleFontColor}}>{main_title}</h5>
+									</div>
+								</a>
+								: 	
 								<div class="back-title_wrapper">
 									<h5 id="back_main_header" style={{fontSize:blogTitleFontSize, color:blogTitleFontColor}}>{main_title}</h5>
 								</div>
-							</a>
-							{
-								attributes.show_date 
-									? 
-									<p class="post_date">{post_date}</p>
-									: 
-									''
 							}
 							
-							<div>
-								{/* <img src={image_url} /> */}
-							</div>
+							{ attributes.show_date && <p class="post_date">{post_date}</p> }
 							<div class="content" style={{fontSize:descriptionFontSize, color:descriptionColor}} dangerouslySetInnerHTML={{__html: clean_content}}/>
 							{
-								attributes.show_readmore 
-									? 
+								attributes.show_readmore &&
 									<a href={post_link} class="post_link" target={readmore_target}>
 										{attributes.custom_readmore_text}
 									</a>  
-									: 
-									''
 							}
 						</div>
 					</div>
 					</>
 				);
-			});
+			}): [];
 		}
-			var type_dropdown = post_types
-				? post_types.map(function (type) {
-						return { value: type.rest_base, label: type.name };
-				})
-				: "";
-		
+		back_listing =  ((typeof back_listing !== 'undefined') 
+							? (Object.keys(back_listing).length !== 0 ? back_listing : <div className='text-center'><h3>No Content</h3></div>) 
+							: '');
+
+		var postTypes 		= [];
+		var defaultTypes 	= [ 'pages', 'media', 'menu-items', 'blocks', 'templates', 'template-parts', 'navigation' ];
+		var type_dropdown 	= post_types
+			? post_types.map(function (type, index) {
+					if(!defaultTypes.includes(type.rest_base)){
+						postTypes.push({ value: type.rest_base, label: type.name });
+					}
+			})
+			: "";
+
 		const changeNumberOfColumns = (newColumns) => {
 			let colClass = "";
 			switch (newColumns) {
@@ -214,37 +198,20 @@ class BlockEdit extends Component {
 				size: 22,
 			},
 		];
-		const fallbackFontSize = 18;
-		const today_date = new Date();
+		const fallbackFontSize 	= 18;
+		const today_date 		= new Date();
 
 		return (
-			<div
-			// onClick={() =>
-			// 	setAttributes({
-			// 		toolbar_show:attributes.toolbar_show == "none" ? "inline-block" : "none",
-			// 		toolbar_border: attributes.toolbar_border == "none" ? '2px solid blue' : "none",
-			// 	},)
-			// }
-			// style={{border: attributes.toolbar_border}}
-			>
+			<>
 				<InspectorControls>
 					<PanelBody title={"Title"} initialOpen={true}>
-						{/* <RangeControl
-							value={attributes.titleFontSize}
-							onChange={(titleFontSize) => setAttributes({ titleFontSize })}
-							min={0}
-							max={100}
-							step={2}
-						/> */}
 						<FontSizePicker
 							fontSizes={ fontSizes }
 							value={ attributes.titleFontSize }
 							fallbackFontSize={ fallbackFontSize }
 							onChange={(titleFontSize) => setAttributes({ titleFontSize })}
 						/>
-						<PanelRow>
-							<strong>Color</strong>
-						</PanelRow>
+						<span>Color</span>
 						<ColorPalette
 							value={attributes.titleColor}
 							onChange={(titleColor) => setAttributes({ titleColor })}
@@ -252,51 +219,15 @@ class BlockEdit extends Component {
 					</PanelBody>
 
 					<PanelBody title={"Design"} initialOpen={false}>
-						<PanelRow>
-							<strong>Number of Columns</strong>
-						</PanelRow>
+						<p style={{marginBottom:0}}>Number of Columns</p>
 						<RangeControl
-							value={attributes.number_of_columns}
+						value={attributes.number_of_columns}
 							onChange={changeNumberOfColumns}
 							min={1}
 							max={4}
 							step={1}
 						/>
-						
-						{/* <SelectControl
-							label="Post Types"
-							value={attributes.selected_type}
-							options={type_dropdown}
-							// onChange={(newType) =>
-							// 	setAttributes({
-							// 		selected_type: newType,
-							// 		posts_array: apiFetch({ path: "/wp/v2/"+newType }).then((posts) => {
-							// 			// const new_array = posts.map((posts) => {
-							// 			// 	props.setAttributes( {categories : posts.categories})
-							// 			// } )
-							// 			this.props.setAttributes({ posts_array: posts });
-							// 		})
-							// 	})
-							// }
-							onChange={(newType) => apiFetch({ path: "/wp/v2/"+newType }).then((posts) => {
-								// const new_array = posts.map((posts) => {
-								// 	props.setAttributes( {categories : posts.categories})
-								// } )
-								this.props.setAttributes({ selected_type: newType , posts_array: posts});
-							})}
-						/> */}
-						<PanelRow>
-							<strong>Blog Title</strong>
-						</PanelRow>
-						{/* <RangeControl
-							value={attributes.descriptionFontSize}
-							onChange={(descriptionFontSize) =>
-								setAttributes({ descriptionFontSize })
-							}
-							min={0}
-							max={100}
-							step={2}
-						/> */}
+						<strong>Blog Title</strong>
 						<FontSizePicker
 							fontSizes={ fontSizes }
 							value={ attributes.blogTitleFontSize }
@@ -305,22 +236,9 @@ class BlockEdit extends Component {
 						/>
 						<ColorPalette
 							value={attributes.blogTitleFontColor}
-							onChange={(blogTitleFontColor) =>
-								setAttributes({ blogTitleFontColor })
-							}
+							onChange={(blogTitleFontColor) => setAttributes({ blogTitleFontColor }) }
 						/>
-						<PanelRow>
-							<strong>Blog Body</strong>
-						</PanelRow>
-						{/* <RangeControl
-							value={attributes.descriptionFontSize}
-							onChange={(descriptionFontSize) =>
-								setAttributes({ descriptionFontSize })
-							}
-							min={0}
-							max={100}
-							step={2}
-						/> */}
+						<strong>Blog Body</strong>
 						<FontSizePicker
 							fontSizes={ descfontSizes }
 							value={ attributes.descriptionFontSize }
@@ -329,74 +247,95 @@ class BlockEdit extends Component {
 						/>
 						<ColorPalette
 							value={attributes.descriptionColor}
-							onChange={(descriptionColor) =>
-								setAttributes({ descriptionColor })
-							}
+							onChange={(descriptionColor) => setAttributes({ descriptionColor }) }
 						/>
 					</PanelBody>
 					<PanelBody title={"Content"} initialOpen={false}>
+						<br/>
+						<p>Number of Posts to Show</p>
+						<NumberControl
+							min={1}
+							value={attributes.numberofPosts}
+							onChange={(numberofPosts, event) => setAttributes({ numberofPosts:numberofPosts })}
+							// onChange={(numberofPosts, extra) => console.log(numberofPosts, extra.event.target?.validity.valid)}
+							// onChange={(newNumber) => apiFetch({ path: "/wp/v2/"+attributes.selected_type+'/?per_page='+newNumber }).then((posts) => {
+							// 	this.props.setAttributes({ numberofPosts: newNumber , posts_array: posts});
+							// })}
+							
+						/>
+						{/* <RangeControl
+							value={attributes.numberofPosts}
+							// onChange={(numberofPosts) => setAttributes({ numberofPosts }) }
+							onChange={(newNumber) => apiFetch({ path: "/wp/v2/"+attributes.selected_type+'/?per_page='+newNumber }).then((posts) => {
+								this.props.setAttributes({ numberofPosts: newNumber , posts_array: posts});
+							})}
+							min={1}
+							max={100}
+							step={1}
+						/> */}
+						{
+							postTypes.length > 1 && 
+							<SelectControl
+								label="Post Types"
+								value={attributes.selected_type}
+								options={postTypes}
+								onChange={(newType) => apiFetch({ path: "/wp/v2/"+newType+'/?per_page='+attributes.numberofPosts }).then((posts) => {
+									this.props.setAttributes({ selected_type: newType , posts_array: posts});
+								})}
+							/>
+						}
 						<p>Show Content/Excerpt?</p>
-						{/* <RadioGroup label="Width" onChange={(show_excerpt_content) => setAttributes({ show_excerpt_content })} checked= {attributes.show_excerpt_content}>
-							<Radio value="excerpt">Excerpt</Radio>
-							<Radio value="content">Content</Radio>
-						</RadioGroup> */}
 						<ToggleGroupControl isBlock value={attributes.show_excerpt_content} onChange={(show_excerpt_content) => setAttributes({ show_excerpt_content })} >
 							<ToggleGroupControlOption value='excerpt' label="Excerpt" />
 							<ToggleGroupControlOption value='content' label="Content" />
 						</ToggleGroupControl>
+
 						<ToggleControl
-							label="Show Date?"
-							// help={
-							// 	attributes.show_date
-							// 		? 'Show Date'
-							// 		: 'Hide Date'
-							// }
-							checked={ attributes.show_date }
-							onChange={(show_date) =>
-								setAttributes({ show_date })
+							label="Title Link?"
+							checked={ attributes.blogTitleLink }
+							onChange={(blogTitleLink) =>
+								setAttributes({ blogTitleLink })
 							}
 						/>
 						{
-							attributes.show_date 
-							?
-							<>
-								<SelectControl 
-									label="Date Format"
-									value={ attributes.date_format }
-									options={ [
-										{ label: Moment(today_date).format("MM-DD-YY"), value:'MM-DD-YY' },
-										{ label: Moment(today_date).format("YYYY-MM-DD"), value:'YYYY-MM-DD' },
-										{ label: Moment(today_date).format("DD/MM/YY"), value:'DD/MM/YY' },
-										{ label: Moment(today_date).format("MMM DD, YYYY"), value:'MMM DD, YYYY' },
-									] }
-									onChange={ ( date_format ) => setAttributes({date_format}) }
-								/>
-							</>
-							: 
-							'' 
+							attributes.blogTitleLink  &&
+							<ToggleControl
+								label="Title Link in new tab?"
+								checked={ attributes.blogTitleLinkNewTab }
+								onChange={(blogTitleLinkNewTab) => setAttributes({ blogTitleLinkNewTab }) }
+							/>
+						}
+						<ToggleControl
+							label="Show Date?"
+							checked={ attributes.show_date }
+							onChange={(show_date) => ({ show_date }) }
+						/>
+						{
+							attributes.show_date &&
+							<SelectControl 
+								label="Date Format"
+								value={ attributes.date_format }
+								options={ [
+									{ label: Moment(today_date).format("MM-DD-YY"), value:'MM-DD-YY' },
+									{ label: Moment(today_date).format("YYYY-MM-DD"), value:'YYYY-MM-DD' },
+									{ label: Moment(today_date).format("DD/MM/YY"), value:'DD/MM/YY' },
+									{ label: Moment(today_date).format("MMM DD, YYYY"), value:'MMM DD, YYYY' },
+								] }
+								onChange={ ( date_format ) => setAttributes({date_format}) }
+							/>
 						}
 						<ToggleControl
 							label="Show Read More?"
-							// help={
-							// 	attributes.show_readmore
-							// 		? 'Show Read More'
-							// 		: 'Hide Read More'
-							// }
 							checked={ attributes.show_readmore }
-							onChange={(show_readmore) =>
-								setAttributes({ show_readmore })
-							}
+							onChange={(show_readmore) => setAttributes({ show_readmore }) }
 						/>
 						{
-							attributes.show_readmore 
-							?
+							attributes.show_readmore &&
 							<>
 								<ToggleControl
 								label="Open in new tab?"
 								checked={ attributes.readmore_newtab }
-								onChange={(readmore_newtab) =>
-									setAttributes({ readmore_newtab })
-								}
+								onChange={(readmore_newtab) => setAttributes({ readmore_newtab }) }
 								/>
 								<TextControl
 									label='Custom "Read More" text'
@@ -404,21 +343,9 @@ class BlockEdit extends Component {
 									onChange={ ( custom_readmore_text ) =>  setAttributes({ custom_readmore_text })}
 								/>
 							</>
-							: 
-							'' 
 						}
 					</PanelBody>
 				</InspectorControls>
-				{/* <Toolbar label="Options" style={{ display: attributes.toolbar_show }}>
-					<ToolbarGroup>
-						<ToolbarButton
-							icon={trash}
-							label="Remoe"
-							onClick={() => console.log("clicked removed")}
-						/>
-					</ToolbarGroup>
-				</Toolbar> */}
-
 				<RichText
 					tagName="h2"
 					placeholder="Enter Blog Title"
@@ -438,7 +365,7 @@ class BlockEdit extends Component {
 						{back_listing}
 					</div>
 				</div>
-			</div>
+			</>
 		);
 	}
 }
