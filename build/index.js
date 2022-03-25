@@ -554,7 +554,7 @@ class BlockEdit extends Component {
       onChange: custom_readmore_text => setAttributes({
         custom_readmore_text
       })
-    })))), console.log(attributes.page_title), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(RichText, {
+    })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(RichText, {
       tagName: "h2",
       placeholder: "Enter Blog Title",
       className: "text-center",
@@ -698,7 +698,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
     page_title: {
       type: "string",
       source: "html",
-      selector: "h2"
+      selector: "h2.text-center"
     },
     title_alignment: {
       type: "string",
@@ -794,7 +794,9 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
   /**
    * @see ./save.js
    */
-  save: _save__WEBPACK_IMPORTED_MODULE_3__["default"]
+  save: props => {
+    return null;
+  }
 });
 
 /***/ }),

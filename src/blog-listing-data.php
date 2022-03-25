@@ -19,7 +19,7 @@
  
     register_block_type( 'create-block/blog-listing-block', array(
         'api_version' => 2,
-        'editor_script' => 'gutenberg-examples-dynamic',
+        // 'editor_script' => 'gutenberg-examples-dynamic',
         'render_callback' => 'gutenberg_examples_dynamic_render_callback',
         'attributes' => array(
             'page_title' => array(
@@ -43,7 +43,7 @@
             ),
             'descriptionFontSize' => array(
                 'type' => 'number',
-                'default'=> 22,
+                'default'=> 14,
             ),
             'titleColor' => array(
                 'type' => 'string',
@@ -104,18 +104,20 @@
 }
 
 function gutenberg_examples_dynamic_render_callback( $block_attributes, $content ) {
-
+    
     $page_title             = $block_attributes['page_title'];
     $column_class           = $block_attributes['column_class'];
-    $descriptionFontSize    = $block_attributes['descriptionFontSize'] ? 'font-size:'.$block_attributes['descriptionFontSize'].'px;' : '';  
     $blogTitleFontSize      = $block_attributes['blogTitleFontSize'] ? 'font-size:'.$block_attributes['blogTitleFontSize'].'px;' : '';  
     $blogTitleFontColor     = $block_attributes['blogTitleFontColor'] ? 'color:'.$block_attributes['blogTitleFontColor'] : '';  
+    $descriptionFontSize    = $block_attributes['descriptionFontSize'] ? 'font-size:'.$block_attributes['descriptionFontSize'].'px;' : '';  
     $descriptionColor       = $block_attributes['descriptionColor'] ? 'color:'.$block_attributes['descriptionColor'] : '';  
     $custom_readmore_text   = $block_attributes['custom_readmore_text'];  
     $readmore_newtab        = $block_attributes['readmore_newtab'] ? '__blank' : '';  
     $blogTitleLinkNewTab    = $block_attributes['blogTitleLinkNewTab'] ? '__blank' : '';  
     $date_format            = $block_attributes['date_format'];
     $blogTitleLink          = $block_attributes['blogTitleLink'];
+    $show_date              = $block_attributes['show_date'];
+    $show_readmore          = $block_attributes['show_readmore'];
     $titleFontSize          = $block_attributes['titleFontSize'] ? 'font-size:'.$block_attributes['titleFontSize'].'px,' : '';
 
     switch ($date_format) {
@@ -160,35 +162,42 @@ function gutenberg_examples_dynamic_render_callback( $block_attributes, $content
                                 $blog_listing_query->the_post();
                                 
                                 $post_id        = get_the_ID();
-                                $title          = get_the_title( $post_id );
-                                $post_excerpt   = get_the_excerpt( $post_id );
-                                $post_content   = get_the_content( $post_id );
-                                $post_link      = get_the_permalink( $post_id );
+                                $title          = get_the_title( $post_id ) ? get_the_title( $post_id ) : '';
+                                $post_excerpt   = get_the_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : '';
+                                $post_content   = get_the_content( $post_id ) ? get_the_content( $post_id ) : '';
+                                $post_link      = get_the_permalink( $post_id ) ? get_the_permalink( $post_id ) : '';
+                                $post_date      = get_the_date( $date_format, $post_id ) ? get_the_date( $date_format, $post_id ) : '';
                                 $content_type   = ($block_attributes['show_excerpt_content'] == 'excerpt') ? $post_excerpt : $post_content;  
                     ?>
-                    <div class="blog-post-listing <?php echo $column_class; ?>" >
+                    <div class="blog-post-listing <?php echo $column_class.$descriptionFontSize; ?>" >
                         <div class="inner-wrapp" data-index="<?php echo $post_id; ?>">
-                                <?php 
-                                    echo ($blogTitleLink) 
-                                    ?
-                                    '<a href="'.$post_link.'" class="post_link" target="'.$blogTitleLinkNewTab.'" rel="noopener">
-                                        <div class="title_wrapper">
-                                            <h5 id="main_header" '.$blogTitle_style.'>'.$title.'</h5>
-                                        </div>
-                                    </a>'
-                                    : 
-                                    '<div class="title_wrapper">
+                            <?php 
+                                echo ($blogTitleLink) 
+                                ?
+                                '<a href="'.$post_link.'" class="post_link" target="'.$blogTitleLinkNewTab.'" rel="noopener">
+                                    <div class="title_wrapper">
                                         <h5 id="main_header" '.$blogTitle_style.'>'.$title.'</h5>
-                                    </div>';
-                                ?>
-                            <p class="post_date"><?php echo get_the_date( $date_format, $post_id ); ?></p>
+                                    </div>
+                                </a>'
+                                : 
+                                '<div class="title_wrapper">
+                                    <h5 id="main_header" '.$blogTitle_style.'>'.$title.'</h5>
+                                </div>';
+                            ?>
+                            <?php echo ($show_date) ? '<p class="post_date">'.$post_date.'</p>' :  ''; ?>
                             <div class="content main_content" <?php echo $blogDesc_style; ?>>
                                 <?php echo $content_type; ?>
                             </div>
-                           
-                            <a href="<?php echo $post_link; ?>" class='post_link' target=<?php echo $readmore_newtab ?> rel='noopener'>
-                                <?php echo $custom_readmore_text; ?>
-                            </a> 
+                            
+                            <?php 
+                                echo ($show_readmore) 
+                                ?
+                                '<a href="'.$post_link.'" class="post_link" target="'.$readmore_newtab.'" rel="noopener">
+                                    '.$custom_readmore_text.'
+                                </a>'
+                                : 
+                                '';
+                            ?>
                         </div>
                     </div>
 

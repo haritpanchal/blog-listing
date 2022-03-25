@@ -345,7 +345,6 @@ class BlockEdit extends Component {
 						}
 					</PanelBody>
 				</InspectorControls>
-				{console.log(attributes.page_title)}
 				<RichText
 					tagName="h2"
 					placeholder="Enter Blog Title"
