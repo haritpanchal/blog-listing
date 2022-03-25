@@ -22,7 +22,6 @@ import {
 	PanelBody,
 	RangeControl,
 	SelectControl,
-	__experimentalDivider as Divider,
 	ToggleControl,
 	FontSizePicker,
 	__experimentalRadio as Radio,
