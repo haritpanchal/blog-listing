@@ -120,7 +120,7 @@ class BlockEdit extends Component {
 							: '');
 
 		var postTypes 		= [];
-		var defaultTypes 	= [ 'pages', 'media', 'menu-items', 'blocks', 'templates', 'template-parts', 'navigation' ];
+		var defaultTypes 	= [ 'pages', 'media', 'menu-items', 'blocks', 'templates', 'template-parts', 'navigation', 'product' ];
 		var type_dropdown 	= post_types
 			? post_types.map(function (type, index) {
 					if(!defaultTypes.includes(type.rest_base)){
@@ -251,7 +251,7 @@ class BlockEdit extends Component {
 					</PanelBody>
 					<PanelBody title={"Content"} initialOpen={false}>
 						<br/>
-						<p>Number of Posts to Show</p>
+						{/* <p>Number of Posts to Show</p>
 						<NumberControl
 							min={1}
 							value={attributes.numberofPosts}
@@ -261,7 +261,7 @@ class BlockEdit extends Component {
 							// 	this.props.setAttributes({ numberofPosts: newNumber , posts_array: posts});
 							// })}
 							
-						/>
+						/> */}
 						{/* <RangeControl
 							value={attributes.numberofPosts}
 							// onChange={(numberofPosts) => setAttributes({ numberofPosts }) }
@@ -307,7 +307,7 @@ class BlockEdit extends Component {
 						<ToggleControl
 							label="Show Date?"
 							checked={ attributes.show_date }
-							onChange={(show_date) => ({ show_date }) }
+							onChange={(show_date) => setAttributes({ show_date }) }
 						/>
 						{
 							attributes.show_date &&
@@ -345,12 +345,13 @@ class BlockEdit extends Component {
 						}
 					</PanelBody>
 				</InspectorControls>
+				{console.log(attributes.page_title)}
 				<RichText
 					tagName="h2"
 					placeholder="Enter Blog Title"
 					className="text-center"
 					value={attributes.page_title}
-					onChange={(page_title) => setAttributes({ page_title })}
+					onChange={ ( page_title ) =>  setAttributes({ page_title })}
 					style={{
 						color: attributes.titleColor,
 						textAlign: attributes.textAlign,

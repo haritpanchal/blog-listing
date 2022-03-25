@@ -25,14 +25,16 @@ import save from "./save";
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
-registerBlockType("create-block/blog-listing", {
+registerBlockType("create-block/blog-listing-block", {
 	/**
 	 * @see ./edit.js
 	 */
+	title: 'Blog Listing',
+	icon: 'list-view',
+	category: 'widgets',
 	attributes: {
 		posts_array: {
 			type: "array",
-			icon: 'list-view',
 			source: "query",
 			selector: ".blog-post-listing",
 			query: {
@@ -86,7 +88,7 @@ registerBlockType("create-block/blog-listing", {
 		page_title: {
 			type: "string",
 			source: "html",
-			selector: "h2",
+			selector: "h2.text-center",
 		},
 		title_alignment: {
 			type: "string",
@@ -182,5 +184,7 @@ registerBlockType("create-block/blog-listing", {
 	/**
 	 * @see ./save.js
 	 */
-	save: save,
+	save: ( props ) => {
+		return null;
+	},
 });

@@ -344,7 +344,7 @@ class BlockEdit extends Component {
       className: "text-center"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h3", null, "No Content")) : '';
     var postTypes = [];
-    var defaultTypes = ['pages', 'media', 'menu-items', 'blocks', 'templates', 'template-parts', 'navigation'];
+    var defaultTypes = ['pages', 'media', 'menu-items', 'blocks', 'templates', 'template-parts', 'navigation', 'product'];
     var type_dropdown = post_types ? post_types.map(function (type, index) {
       if (!defaultTypes.includes(type.rest_base)) {
         postTypes.push({
@@ -475,17 +475,7 @@ class BlockEdit extends Component {
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], {
       title: "Content",
       initialOpen: false
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("br", null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Number of Posts to Show"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalNumberControl"], {
-      min: 1,
-      value: attributes.numberofPosts,
-      onChange: (numberofPosts, event) => setAttributes({
-        numberofPosts: numberofPosts
-      }) // onChange={(numberofPosts, extra) => console.log(numberofPosts, extra.event.target?.validity.valid)}
-      // onChange={(newNumber) => apiFetch({ path: "/wp/v2/"+attributes.selected_type+'/?per_page='+newNumber }).then((posts) => {
-      // 	this.props.setAttributes({ numberofPosts: newNumber , posts_array: posts});
-      // })}
-
-    }), postTypes.length > 1 && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["SelectControl"], {
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("br", null), postTypes.length > 1 && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["SelectControl"], {
       label: "Post Types",
       value: attributes.selected_type,
       options: postTypes,
@@ -524,7 +514,7 @@ class BlockEdit extends Component {
     }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["ToggleControl"], {
       label: "Show Date?",
       checked: attributes.show_date,
-      onChange: show_date => ({
+      onChange: show_date => setAttributes({
         show_date
       })
     }), attributes.show_date && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["SelectControl"], {
@@ -564,7 +554,7 @@ class BlockEdit extends Component {
       onChange: custom_readmore_text => setAttributes({
         custom_readmore_text
       })
-    })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(RichText, {
+    })))), console.log(attributes.page_title), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(RichText, {
       tagName: "h2",
       placeholder: "Enter Blog Title",
       className: "text-center",
@@ -645,14 +635,16 @@ __webpack_require__.r(__webpack_exports__);
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 
-Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("create-block/blog-listing", {
+Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("create-block/blog-listing-block", {
   /**
    * @see ./edit.js
    */
+  title: 'Blog Listing',
+  icon: 'list-view',
+  category: 'widgets',
   attributes: {
     posts_array: {
       type: "array",
-      icon: 'list-view',
       source: "query",
       selector: ".blog-post-listing",
       query: {
@@ -873,6 +865,8 @@ function save(props) {
     var content_type = props.attributes.show_excerpt_content == 'excerpt' ? post_excerpt : post_content;
     var readmore_target = props.attributes.readmore_newtab ? '__blank' : '';
     var blogTitleLinkNewTab = props.attributes.blogTitleLinkNewTab ? '__blank' : '';
+    console.log(props.attributes.page_title);
+    console.log(props.attributes.show_readmore);
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: column_class + " blog-post-listing"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
