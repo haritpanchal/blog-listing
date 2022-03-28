@@ -19,7 +19,6 @@
  
     register_block_type( 'create-block/blog-listing-block', array(
         'api_version' => 2,
-        // 'editor_script' => 'gutenberg-examples-dynamic',
         'render_callback' => 'gutenberg_examples_dynamic_render_callback',
         'attributes' => array(
             'block_title' => array(
