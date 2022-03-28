@@ -22,8 +22,10 @@
         // 'editor_script' => 'gutenberg-examples-dynamic',
         'render_callback' => 'gutenberg_examples_dynamic_render_callback',
         'attributes' => array(
-            'page_title' => array(
+            'block_title' => array(
                 'type' => 'string',
+                'source' => 'h2'
+                
             ),
             'number_of_columns' => array(
                 'type' => 'number',
@@ -97,7 +99,9 @@
                 'type' => 'number',
                 'default'=> 10,
             ),
-            
+            'content' => array(
+                'type' => 'html',
+            ),
         )
     ) );
  
@@ -105,7 +109,8 @@
 
 function gutenberg_examples_dynamic_render_callback( $block_attributes, $content ) {
     
-    $page_title             = $block_attributes['page_title'];
+    $block_title             = $block_attributes['block_title'];
+    // $block_title                = $block_attributes['page_content'];
     $column_class           = $block_attributes['column_class'];
     $blogTitleFontSize      = $block_attributes['blogTitleFontSize'] ? 'font-size:'.$block_attributes['blogTitleFontSize'].'px;' : '';  
     $blogTitleFontColor     = $block_attributes['blogTitleFontColor'] ? 'color:'.$block_attributes['blogTitleFontColor'] : '';  
@@ -140,11 +145,13 @@ function gutenberg_examples_dynamic_render_callback( $block_attributes, $content
 
     $title_style        = 'style='.$blogTitleFontSize;
     $blogTitle_style    = 'style='.$blogTitleFontSize.$blogTitleFontColor;
-    $blogDesc_style     = 'style='.$descriptionFontSize.$descriptionColor;
+    $blogDesc_style     = 'style=margin-bottom:14px;'.$descriptionFontSize.$descriptionColor;
 
     $blog_listing_query_args = array(
-                                'post_type'     => $block_attributes['selected_type'],
-                                'post_status'   => array('publish'),
+                                'post_type'         => $block_attributes['selected_type'],
+                                'post_status'       => array('publish'),
+                                'posts_per_page'    => 3, 
+                                'paged'             => get_query_var('paged'),
     );
     $blog_listing_query = new WP_Query( $blog_listing_query_args );
     // echo "<pre>";
@@ -153,7 +160,7 @@ function gutenberg_examples_dynamic_render_callback( $block_attributes, $content
     ob_start(); 
     ?>
         <div>
-            <h2><?php echo $page_title; ?></h2>
+            <h2 class="text-center"><?php echo $block_title; ?></h2>
 			<div class="block-content container">
 				<div class="row">
                     <?php 
@@ -169,7 +176,7 @@ function gutenberg_examples_dynamic_render_callback( $block_attributes, $content
                                 $post_date      = get_the_date( $date_format, $post_id ) ? get_the_date( $date_format, $post_id ) : '';
                                 $content_type   = ($block_attributes['show_excerpt_content'] == 'excerpt') ? $post_excerpt : $post_content;  
                     ?>
-                    <div class="blog-post-listing <?php echo $column_class.$descriptionFontSize; ?>" >
+                    <div class="blog-post-listing <?php echo $column_class; ?>" <?php echo $blogDesc_style; ?> >
                         <div class="inner-wrapp" data-index="<?php echo $post_id; ?>">
                             <?php 
                                 echo ($blogTitleLink) 
@@ -205,6 +212,17 @@ function gutenberg_examples_dynamic_render_callback( $block_attributes, $content
                             }
                         } 
                         wp_reset_postdata();
+                    ?>
+                    <div>
+                        <span><?php next_posts_link( 'Older posts', $blog_listing_query ->max_num_pages); ?></span>
+                        <span style="float:right"><?php previous_posts_link( 'Newer posts' ); ?></span>
+                    </div>
+                    <?php
+                        echo paginate_links( array(
+                            'current' => max( 1, get_query_var('paged') ),
+                            'total' => $blog_listing_query->max_num_pages,
+                            'mid_size' => 1
+                        ) );
                     ?>
                 </div>
 			</div>

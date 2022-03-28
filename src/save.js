@@ -26,6 +26,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
  */
 export default function save(props) {
 	const { posts_array } = props.attributes;
+	console.log(props.attributes.block_title);
 	var posts_array_listing = posts_array ? posts_array.map(function (item) {
 		var post_id 			= item.id ? item.id : "";
 		var post_date 			= item.date ? Moment(item.date).format(props.attributes.date_format) : "";
@@ -41,8 +42,6 @@ export default function save(props) {
 		var content_type 		= (props.attributes.show_excerpt_content == 'excerpt') ? post_excerpt : post_content;
 		var readmore_target 	= (props.attributes.readmore_newtab) ? '__blank' : ''; 
 		var blogTitleLinkNewTab = (props.attributes.blogTitleLinkNewTab) ? '__blank' : ''; 
-		console.log(props.attributes.page_title)
-		console.log(props.attributes.show_readmore);
 		return (
 			<div className={column_class + " blog-post-listing"}>
 				<div class="inner-wrapp" data-index={post_id}>
@@ -79,7 +78,7 @@ export default function save(props) {
 			<RichText.Content
 				tagName="h2"
 				className="text-center"
-				value={props.attributes.page_title}
+				value={props.attributes.block_title}
 				style={{color: props.attributes.titleColor}}
 			/>
 			<div class="block-content container">

@@ -15,6 +15,8 @@ import {
 	useBlockProps,
 	ColorPalette,
 	InspectorControls,
+	BlockControls,
+	BlockMover,
 } from "@wordpress/block-editor";
 
 
@@ -48,6 +50,7 @@ const { RichText } = wp.blockEditor;
  */
 
 class BlockEdit extends Component {
+	
 	componentDidMount() {
 		apiFetch({ path: "/wp/v2/"+this.props.attributes.selected_type+'/?per_page='+this.props.attributes.numberofPosts }).then((posts) => {
 			this.props.setAttributes({ posts_array: posts });
@@ -87,14 +90,17 @@ class BlockEdit extends Component {
 					<>
 					<div className={column_class + " back-blog-post-listing"}>
 						<div class="back-inner-wrapp" data-index={post_id}>
+								
 							{
 								attributes.blogTitleLink 
-								? 
-								<a href={post_link} class="post_link" target={blogTitleLinkNewTab}>
+								?
 									<div class="back-title_wrapper">
-										<h5 id="back_main_header" style={{fontSize:blogTitleFontSize, color:blogTitleFontColor}}>{main_title}</h5>
+											<h5 id="back_main_header">
+												<a href={post_link} class="post_link" target={blogTitleLinkNewTab} style={{fontSize:blogTitleFontSize, color:blogTitleFontColor}}>
+													{main_title}
+												</a>
+											</h5>
 									</div>
-								</a>
 								: 	
 								<div class="back-title_wrapper">
 									<h5 id="back_main_header" style={{fontSize:blogTitleFontSize, color:blogTitleFontColor}}>{main_title}</h5>
@@ -116,8 +122,10 @@ class BlockEdit extends Component {
 			}): [];
 		}
 		back_listing =  ((typeof back_listing !== 'undefined') 
-							? (Object.keys(back_listing).length !== 0 ? back_listing : <div className='text-center'><h3>No Content</h3></div>) 
-							: '');
+							? (Object.keys(back_listing).length !== 0 
+								? back_listing 
+								: <div className='text-center'><h3>No Content</h3></div>) 
+							: 'Loading');
 
 		var postTypes 		= [];
 		var defaultTypes 	= [ 'pages', 'media', 'menu-items', 'blocks', 'templates', 'template-parts', 'navigation', 'product' ];
@@ -203,7 +211,7 @@ class BlockEdit extends Component {
 		return (
 			<>
 				<InspectorControls>
-					<PanelBody title={"Title"} initialOpen={true}>
+					{/* <PanelBody title={"Title"} initialOpen={false}>
 						<FontSizePicker
 							fontSizes={ fontSizes }
 							value={ attributes.titleFontSize }
@@ -215,9 +223,9 @@ class BlockEdit extends Component {
 							value={attributes.titleColor}
 							onChange={(titleColor) => setAttributes({ titleColor })}
 						/>
-					</PanelBody>
+					</PanelBody> */}
 
-					<PanelBody title={"Design"} initialOpen={false}>
+					<PanelBody title={"Design"} initialOpen={true}>
 						<p style={{marginBottom:0}}>Number of Columns</p>
 						<RangeControl
 						value={attributes.number_of_columns}
@@ -345,25 +353,28 @@ class BlockEdit extends Component {
 						}
 					</PanelBody>
 				</InspectorControls>
-				<RichText
+				{/* <RichText
 					tagName="h2"
 					placeholder="Enter Blog Title"
 					className="text-center"
-					value={attributes.page_title}
-					onChange={ ( page_title ) =>  setAttributes({ page_title })}
+					value={attributes.block_title}
+					onChange={ ( block_title ) =>  setAttributes({ block_title })}
 					style={{
 						color: attributes.titleColor,
 						textAlign: attributes.textAlign,
 						fontSize: attributes.titleFontSize,
 					}}
-				/>
-
+				/> */}
+				{/* {console.log(this.props)} */}
+				
 				<div className="block-content container">
 					<div className="row">
 						<br />
 						{back_listing}
 					</div>
+					
 				</div>
+				
 			</>
 		);
 	}

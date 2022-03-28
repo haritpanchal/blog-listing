@@ -301,14 +301,14 @@ class BlockEdit extends Component {
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
           class: "back-inner-wrapp",
           "data-index": post_id
-        }, attributes.blogTitleLink ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
-          href: post_link,
-          class: "post_link",
-          target: blogTitleLinkNewTab
-        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+        }, attributes.blogTitleLink ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
           class: "back-title_wrapper"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h5", {
-          id: "back_main_header",
+          id: "back_main_header"
+        }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+          href: post_link,
+          class: "post_link",
+          target: blogTitleLinkNewTab,
           style: {
             fontSize: blogTitleFontSize,
             color: blogTitleFontColor
@@ -342,7 +342,7 @@ class BlockEdit extends Component {
 
     back_listing = typeof back_listing !== 'undefined' ? Object.keys(back_listing).length !== 0 ? back_listing : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "text-center"
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h3", null, "No Content")) : '';
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h3", null, "No Content")) : 'Loading';
     var postTypes = [];
     var defaultTypes = ['pages', 'media', 'menu-items', 'blocks', 'templates', 'template-parts', 'navigation', 'product'];
     var type_dropdown = post_types ? post_types.map(function (type, index) {
@@ -421,23 +421,8 @@ class BlockEdit extends Component {
     const fallbackFontSize = 18;
     const today_date = new Date();
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], {
-      title: "Title",
-      initialOpen: true
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["FontSizePicker"], {
-      fontSizes: fontSizes,
-      value: attributes.titleFontSize,
-      fallbackFontSize: fallbackFontSize,
-      onChange: titleFontSize => setAttributes({
-        titleFontSize
-      })
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("span", null, "Color"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["ColorPalette"], {
-      value: attributes.titleColor,
-      onChange: titleColor => setAttributes({
-        titleColor
-      })
-    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], {
       title: "Design",
-      initialOpen: false
+      initialOpen: true
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", {
       style: {
         marginBottom: 0
@@ -554,20 +539,7 @@ class BlockEdit extends Component {
       onChange: custom_readmore_text => setAttributes({
         custom_readmore_text
       })
-    })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(RichText, {
-      tagName: "h2",
-      placeholder: "Enter Blog Title",
-      className: "text-center",
-      value: attributes.page_title,
-      onChange: page_title => setAttributes({
-        page_title
-      }),
-      style: {
-        color: attributes.titleColor,
-        textAlign: attributes.textAlign,
-        fontSize: attributes.titleFontSize
-      }
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "block-content container"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "row"
@@ -642,6 +614,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
   title: 'Blog Listing',
   icon: 'list-view',
   category: 'widgets',
+  apiVersion: 1,
   attributes: {
     posts_array: {
       type: "array",
@@ -695,7 +668,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
         }
       }
     },
-    page_title: {
+    block_title: {
       type: "string",
       source: "html",
       selector: "h2.text-center"
@@ -746,7 +719,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
     },
     blogTitleLinkNewTab: {
       type: "boolean",
-      default: true
+      default: false
     },
     descriptionColor: {
       type: "string",
@@ -852,6 +825,7 @@ function save(props) {
   const {
     posts_array
   } = props.attributes;
+  console.log(props.attributes.block_title);
   var posts_array_listing = posts_array ? posts_array.map(function (item) {
     var post_id = item.id ? item.id : "";
     var post_date = item.date ? moment__WEBPACK_IMPORTED_MODULE_3___default()(item.date).format(props.attributes.date_format) : "";
@@ -867,8 +841,6 @@ function save(props) {
     var content_type = props.attributes.show_excerpt_content == 'excerpt' ? post_excerpt : post_content;
     var readmore_target = props.attributes.readmore_newtab ? '__blank' : '';
     var blogTitleLinkNewTab = props.attributes.blogTitleLinkNewTab ? '__blank' : '';
-    console.log(props.attributes.page_title);
-    console.log(props.attributes.show_readmore);
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: column_class + " blog-post-listing"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
@@ -919,7 +891,7 @@ function save(props) {
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["RichText"].Content, {
     tagName: "h2",
     className: "text-center",
-    value: props.attributes.page_title,
+    value: props.attributes.block_title,
     style: {
       color: props.attributes.titleColor
     }

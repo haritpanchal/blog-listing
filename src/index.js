@@ -32,6 +32,7 @@ registerBlockType("create-block/blog-listing-block", {
 	title: 'Blog Listing',
 	icon: 'list-view',
 	category: 'widgets',
+	apiVersion: 1,	
 	attributes: {
 		posts_array: {
 			type: "array",
@@ -85,7 +86,7 @@ registerBlockType("create-block/blog-listing-block", {
 				},
 			},
 		},
-		page_title: {
+		block_title: {
 			type: "string",
 			source: "html",
 			selector: "h2.text-center",
@@ -136,7 +137,7 @@ registerBlockType("create-block/blog-listing-block", {
 		},
 		blogTitleLinkNewTab: {
 			type: "boolean",
-			default: true,
+			default: false,
 		},
 		descriptionColor: {
 			type: "string",
@@ -177,7 +178,7 @@ registerBlockType("create-block/blog-listing-block", {
 		numberofPosts: {
 			type: "number",
 			default: 10,
-		}
+		},
 	},
 	edit: BlockEdit,
 
