@@ -29,7 +29,8 @@ registerBlockType("create-block/blog-listing-block", {
 	/**
 	 * @see ./edit.js
 	 */
-	title: 'Blog Listing',
+	title: 'Blog Listing Block',
+	description: "Gutenberg Block to list posts and custom post types with additional features.",
 	icon: 'list-view',
 	category: 'widgets',
 	apiVersion: 1,	
@@ -86,11 +87,6 @@ registerBlockType("create-block/blog-listing-block", {
 				},
 			},
 		},
-		block_title: {
-			type: "string",
-			source: "html",
-			selector: "h2.text-center",
-		},
 		title_alignment: {
 			type: "string",
 			default: "none",
@@ -111,10 +107,6 @@ registerBlockType("create-block/blog-listing-block", {
 			type: "string",
 			default: "col-12",
 		},
-		titleFontSize: {
-			type: "number",
-			default: 22,
-		},
 		blogTitleFontSize: {
 			type: "number",
 			default: 22,
@@ -122,10 +114,6 @@ registerBlockType("create-block/blog-listing-block", {
 		descriptionFontSize: {
 			type: "number",
 			default: 14,
-		},
-		titleColor: {
-			type: "string",
-			default: "#333",
 		},
 		blogTitleFontColor: {
 			type: "string",
@@ -175,9 +163,57 @@ registerBlockType("create-block/blog-listing-block", {
 			type: "string",
 			default: "list"
 		},
-		numberofPosts: {
+		posts_per_page: {
 			type: "number",
 			default: 10,
+		},
+		pagination_type: {
+			type: 'string',
+			default: 'old_new'
+		},
+		older_posts_label: {
+			type: 'string',
+			default: 'Older Posts'
+		},
+		newer_posts_label: {
+			type: 'string',
+			default: 'Newer Posts'
+		},
+		show_prev_next_buttons: {
+			type: "boolean",
+			default: true,
+		},
+		previous_label: {
+			type: 'string',
+			default: 'Previous'
+		},
+		next_label: {
+			type: 'string',
+			default: 'Next'
+		},
+		sorting_method: {
+			type: 'string',
+			default: 'old_new'
+		},
+		blb_orderby: {
+			type: 'string',
+			default: 'date'
+		},
+		blb_order: {
+			type: 'string',
+			default: 'asc'
+		},
+		open_design_panel: {
+			type: "boolean",
+			default: false,
+		},
+		open_content_panel: {
+			type: "boolean",
+			default: false,
+		},
+		open_pagination_panel: {
+			type: "boolean",
+			default: false,
 		},
 	},
 	edit: BlockEdit,

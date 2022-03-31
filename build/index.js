@@ -249,7 +249,7 @@ const {
 class BlockEdit extends Component {
   componentDidMount() {
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default()({
-      path: "/wp/v2/" + this.props.attributes.selected_type + '/?per_page=' + this.props.attributes.numberofPosts
+      path: "/wp/v2/" + this.props.attributes.selected_type + '/?per_page=' + this.props.attributes.posts_per_page + '&orderby=' + this.props.attributes.blb_orderby + '&order=' + this.props.attributes.blb_order
     }).then(posts => {
       this.props.setAttributes({
         posts_array: posts
@@ -296,6 +296,19 @@ class BlockEdit extends Component {
         var readmore_target = attributes.readmore_newtab ? '__blank' : '';
         var blogTitleLinkNewTab = attributes.blogTitleLinkNewTab ? '__blank' : '';
         var categories = item.categories ? item.categories : '';
+
+        const openDesignPanel = () => {
+          setAttributes({
+            open_design_panel: attributes.open_design_panel ? false : true
+          });
+        };
+
+        const openContentPanel = () => {
+          setAttributes({
+            open_content_panel: attributes.open_content_panel ? false : true
+          });
+        };
+
         return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
           className: column_class + " back-blog-post-listing"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
@@ -304,9 +317,10 @@ class BlockEdit extends Component {
         }, attributes.blogTitleLink ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
           class: "back-title_wrapper"
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("h5", {
-          id: "back_main_header"
+          id: "back_main_header",
+          onClick: openDesignPanel
         }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
-          href: post_link,
+          href: "#",
           class: "post_link",
           target: blogTitleLinkNewTab,
           style: {
@@ -320,7 +334,8 @@ class BlockEdit extends Component {
           style: {
             fontSize: blogTitleFontSize,
             color: blogTitleFontColor
-          }
+          },
+          onClick: openDesignPanel
         }, main_title)), attributes.show_date && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", {
           class: "post_date"
         }, post_date), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
@@ -333,9 +348,10 @@ class BlockEdit extends Component {
             __html: clean_content
           }
         }), attributes.show_readmore && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
-          href: post_link,
+          href: "#",
           class: "post_link",
-          target: readmore_target
+          target: readmore_target,
+          onClick: openContentPanel
         }, attributes.custom_readmore_text))));
       }) : [];
     }
@@ -420,9 +436,16 @@ class BlockEdit extends Component {
     }];
     const fallbackFontSize = 18;
     const today_date = new Date();
+
+    const openPaginationPanel = () => {
+      setAttributes({
+        open_pagination_panel: attributes.open_pagination_panel ? false : true
+      });
+    };
+
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], {
       title: "Design",
-      initialOpen: true
+      initialOpen: attributes.open_design_panel
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", {
       style: {
         marginBottom: 0
@@ -459,20 +482,21 @@ class BlockEdit extends Component {
       })
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], {
       title: "Content",
-      initialOpen: false
+      initialOpen: attributes.open_content_panel
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("br", null), postTypes.length > 1 && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["SelectControl"], {
       label: "Post Types",
       value: attributes.selected_type,
       options: postTypes,
       onChange: newType => _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default()({
-        path: "/wp/v2/" + newType + '/?per_page=' + attributes.numberofPosts
+        path: "/wp/v2/" + newType + '/?per_page=' + attributes.posts_per_page + '&orderby=' + this.props.attributes.blb_orderby + '&order=' + this.props.attributes.blb_order
       }).then(posts => {
         this.props.setAttributes({
           selected_type: newType,
           posts_array: posts
         });
       })
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Show Content/Excerpt?"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalToggleGroupControl"], {
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalToggleGroupControl"], {
+      label: "Show Content/Excerpt?",
       isBlock: true,
       value: attributes.show_excerpt_content,
       onChange: show_excerpt_content => setAttributes({
@@ -539,11 +563,161 @@ class BlockEdit extends Component {
       onChange: custom_readmore_text => setAttributes({
         custom_readmore_text
       })
+    }))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["PanelBody"], {
+      title: "Pagination",
+      initialOpen: attributes.open_pagination_panel
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Posts Per Page"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalNumberControl"], {
+      min: 1,
+      value: attributes.posts_per_page,
+      onChange: newNumber => _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default()({
+        path: "/wp/v2/" + attributes.selected_type + '/?per_page=' + newNumber + '&orderby=' + this.props.attributes.blb_orderby + '&order=' + this.props.attributes.blb_order
+      }).then(posts => {
+        this.props.setAttributes({
+          posts_array: posts,
+          posts_per_page: parseInt(newNumber)
+        });
+      })
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("br", null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["SelectControl"], {
+      label: "Sorting Method",
+      value: attributes.sorting_method,
+      options: [{
+        label: 'Oldest to Newest',
+        value: 'old_new'
+      }, {
+        label: 'Newest to Oldest',
+        value: 'new_old'
+      }, {
+        label: 'A --> Z',
+        value: 'title_asc'
+      }, {
+        label: 'Z --> A',
+        value: 'title_desc'
+      }],
+      onChange: newMethod => {
+        let orderby = '';
+        let order = '';
+
+        switch (newMethod) {
+          case 'old_new':
+            orderby = 'date';
+            order = 'asc';
+            break;
+
+          case 'new_old':
+            orderby = 'date';
+            order = 'desc';
+            break;
+
+          case 'title_desc':
+            orderby = 'title';
+            order = 'desc';
+            break;
+
+          case 'title_asc':
+            orderby = 'title';
+            order = 'asc';
+            break;
+
+          default:
+            break;
+        }
+
+        setAttributes({
+          sorting_method: newMethod,
+          blb_orderby: orderby,
+          blb_order: order
+        });
+        _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default()({
+          path: "/wp/v2/" + this.props.attributes.selected_type + '/?per_page=' + this.props.attributes.posts_per_page + '&orderby=' + orderby + '&order=' + order
+        }).then(posts => {
+          this.props.setAttributes({
+            posts_array: posts
+          });
+        });
+      }
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalToggleGroupControl"], {
+      label: "Pagination Type",
+      isBlock: true,
+      value: attributes.pagination_type,
+      onChange: pagination_type => setAttributes({
+        pagination_type
+      })
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalToggleGroupControlOption"], {
+      value: "old_new",
+      label: "Old / New"
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["__experimentalToggleGroupControlOption"], {
+      value: "number",
+      label: "Number"
+    })), attributes.pagination_type == 'old_new' ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
+      label: "Older Posts Label",
+      value: attributes.older_posts_label,
+      onChange: older_posts_label => setAttributes({
+        older_posts_label
+      })
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
+      label: "Newer Posts Label",
+      value: attributes.newer_posts_label,
+      onChange: newer_posts_label => setAttributes({
+        newer_posts_label
+      })
+    })) : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, attributes.show_prev_next_buttons && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
+      label: "Previous Label",
+      value: attributes.previous_label,
+      onChange: previous_label => setAttributes({
+        previous_label
+      })
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["TextControl"], {
+      label: "Next Label",
+      value: attributes.next_label,
+      onChange: next_label => setAttributes({
+        next_label
+      })
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__["ToggleControl"], {
+      label: "Hide Previous / Next Butttons?",
+      checked: attributes.show_prev_next_buttons,
+      onChange: show_prev_next_buttons => setAttributes({
+        show_prev_next_buttons
+      })
     })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: "block-content container"
+      className: "blb-block-content block-content container"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "row"
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("br", null), back_listing)));
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("br", null), back_listing), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "blb-pagination"
+    }, this.props.attributes.pagination_type == 'old_new' ? Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "blb-new-old-pagination"
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("span", {
+      className: "blb-left"
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+      href: "#",
+      onClick: openPaginationPanel
+    }, this.props.attributes.older_posts_label)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("span", {
+      className: "blb-right"
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+      href: "#",
+      onClick: openPaginationPanel
+    }, this.props.attributes.newer_posts_label))) : Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "blb-num-pagination"
+    }, this.props.attributes.show_prev_next_buttons && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+      className: "prev page-numbers",
+      href: "#",
+      onClick: openPaginationPanel
+    }, this.props.attributes.previous_label), "\xA0", Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+      className: "page-numbers",
+      href: "#",
+      onClick: openPaginationPanel
+    }, "1"), "\xA0", Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+      href: "#",
+      onClick: openPaginationPanel
+    }, "2"), "\xA0", Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+      className: "page-numbers",
+      href: "#",
+      onClick: openPaginationPanel
+    }, "3"), "\xA0", this.props.attributes.show_prev_next_buttons && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("a", {
+      className: "next page-numbers",
+      href: "#",
+      onClick: openPaginationPanel
+    }, this.props.attributes.next_label)))));
   }
 
 }
@@ -611,7 +785,8 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
   /**
    * @see ./edit.js
    */
-  title: 'Blog Listing',
+  title: 'Blog Listing Block',
+  description: "Gutenberg Block to list posts and custom post types with additional features.",
   icon: 'list-view',
   category: 'widgets',
   apiVersion: 1,
@@ -668,11 +843,6 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
         }
       }
     },
-    block_title: {
-      type: "string",
-      source: "html",
-      selector: "h2.text-center"
-    },
     title_alignment: {
       type: "string",
       default: "none"
@@ -693,10 +863,6 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
       type: "string",
       default: "col-12"
     },
-    titleFontSize: {
-      type: "number",
-      default: 22
-    },
     blogTitleFontSize: {
       type: "number",
       default: 22
@@ -704,10 +870,6 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
     descriptionFontSize: {
       type: "number",
       default: 14
-    },
-    titleColor: {
-      type: "string",
-      default: "#333"
     },
     blogTitleFontColor: {
       type: "string",
@@ -757,9 +919,57 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
       type: "string",
       default: "list"
     },
-    numberofPosts: {
+    posts_per_page: {
       type: "number",
       default: 10
+    },
+    pagination_type: {
+      type: 'string',
+      default: 'old_new'
+    },
+    older_posts_label: {
+      type: 'string',
+      default: 'Older Posts'
+    },
+    newer_posts_label: {
+      type: 'string',
+      default: 'Newer Posts'
+    },
+    show_prev_next_buttons: {
+      type: "boolean",
+      default: true
+    },
+    previous_label: {
+      type: 'string',
+      default: 'Previous'
+    },
+    next_label: {
+      type: 'string',
+      default: 'Next'
+    },
+    sorting_method: {
+      type: 'string',
+      default: 'old_new'
+    },
+    blb_orderby: {
+      type: 'string',
+      default: 'date'
+    },
+    blb_order: {
+      type: 'string',
+      default: 'asc'
+    },
+    open_design_panel: {
+      type: "boolean",
+      default: false
+    },
+    open_content_panel: {
+      type: "boolean",
+      default: false
+    },
+    open_pagination_panel: {
+      type: "boolean",
+      default: false
     }
   },
   edit: _edit__WEBPACK_IMPORTED_MODULE_2__["default"],

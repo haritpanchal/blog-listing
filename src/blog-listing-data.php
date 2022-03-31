@@ -7,109 +7,119 @@
 
  function gutenberg_examples_dynamic() {
     
-    // automatically load dependencies and version
-    // $asset_file = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php');
- 
-    // wp_register_script(
-    //     'gutenberg-examples-dynamic',
-    //     plugins_url( 'build/block.js', __FILE__ ),
-    //     $asset_file['dependencies'],
-    //     $asset_file['version']
-    // );
- 
+    wp_enqueue_style('blog_listing_block_style', plugins_url( 'style.scss', __FILE__ ) , array(), '0.1.0', 'all');
     register_block_type( 'create-block/blog-listing-block', array(
         'api_version' => 2,
-        'render_callback' => 'gutenberg_examples_dynamic_render_callback',
+        'render_callback' => 'blog_listing_block_callback',
+        'style'           => 'blog_listing_block_style',  
         'attributes' => array(
-            'block_title' => array(
-                'type' => 'string',
-                'source' => 'h2'
-                
-            ),
             'number_of_columns' => array(
-                'type' => 'number',
-                'default'=> 1,
+                'type'      => 'number',
+                'default'   => 1,
             ),
             'column_class' => array(
-                'type' => 'string',
-                'default'=> 'col-12',
-            ),
-            'titleFontSize' => array(
-                'type' => 'number',
-                'default'=> 22,
+                'type'      => 'string',
+                'default'   => 'col-12',
             ),
             'blogTitleFontSize' => array(
-                'type' => 'number',
-                'default'=> 22,
+                'type'      => 'number',
+                'default'   => 22,
             ),
             'descriptionFontSize' => array(
-                'type' => 'number',
-                'default'=> 14,
-            ),
-            'titleColor' => array(
-                'type' => 'string',
-                'default'=> '#333',
+                'type'      => 'number',
+                'default'   => 14,
             ),
             'blogTitleFontColor' => array(
-                'type' => 'string',
-                'default'=> '#333',
+                'type'      => 'string',
+                'default'   => '#333',
             ),
             'descriptionColor' => array(
-                'type' => 'string',
-                'default'=> '#333',
+                'type'      => 'string',
+                'default'   => '#333',
             ),
             'blogTitleLink' => array(
-                'type' => 'boolean',
-                'default'=> true,
+                'type'      => 'boolean',
+                'default'   => true,
             ),
             'blogTitleLinkNewTab' => array(
-                'type' => 'boolean',
-                'default'=> true,
+                'type'      => 'boolean',
+                'default'   => true,
             ),
             'show_excerpt_content' => array(
-                'type' => 'string',
-                'default'=> 'content',
+                'type'      => 'string',
+                'default'   => 'content',
             ),
             'show_date' => array(
-                'type' => 'boolean',
-                'default'=> true,
+                'type'      => 'boolean',
+                'default'   => true,
             ),
             'date_format' => array(
-                'type' => 'string',
-                'default'=> 'MM-DD-YY',
+                'type'      => 'string',
+                'default'   => 'MM-DD-YY',
             ),
             'show_readmore' => array(
-                'type' => 'boolean',
-                'default'=> true,
+                'type'      => 'boolean',
+                'default'   => true,
             ),
             'custom_readmore_text' => array(
-                'type' => 'string',
-                'default'=> 'Read More',
+                'type'      => 'string',
+                'default'   => 'Read More',
             ),
             'readmore_newtab' => array(
-                'type' => 'boolean',
-                'default'=> true,
+                'type'      => 'boolean',
+                'default'   => true,
             ),
             'selected_type' => array(
-                'type' => 'string',
-                'default'=> 'post',
+                'type'      => 'string',
+                'default'   => 'post',
             ),
             'numberofPosts' => array(
-                'type' => 'number',
-                'default'=> 10,
+                'type'      => 'number',
+                'default'   => 10,
             ),
-            'content' => array(
-                'type' => 'html',
+            'posts_per_page' => array(
+                'type'      => 'number',
+                'default'   => 10,
+            ),
+            'pagination_type' => array(
+                'type'      => 'string',
+                'default'   => 'old_new',       
+            ),
+            'older_posts_label' => array(
+                'type'      => 'string',
+                'default'   => 'Older Posts',       
+            ),
+            'newer_posts_label' => array(
+                'type'      => 'string',
+                'default'   => 'Newer Posts',       
+            ),
+            'show_prev_next_buttons' => array(
+                'type'      => 'boolean',
+                'default'   => true,
+            ),
+            'previous_label' => array(
+                'type'      => 'string',
+                'default'   => 'Previous',       
+            ),
+            'next_label' => array(
+                'type'      => 'string',
+                'default'   => 'Next',       
+            ),
+            'blb_orderby' => array(
+                'type'      => 'string',
+                'default'   => 'date',       
+            ),
+            'blb_order' => array(
+                'type'      => 'string',
+                'default'   => 'asc',       
             ),
         )
     ) );
  
 }
 
-function gutenberg_examples_dynamic_render_callback( $block_attributes, $content ) {
+function blog_listing_block_callback( $block_attributes, $content ) {
     
-    $block_title             = $block_attributes['block_title'];
-    // $block_title                = $block_attributes['page_content'];
     $column_class           = $block_attributes['column_class'];
     $blogTitleFontSize      = $block_attributes['blogTitleFontSize'] ? 'font-size:'.$block_attributes['blogTitleFontSize'].'px;' : '';  
     $blogTitleFontColor     = $block_attributes['blogTitleFontColor'] ? 'color:'.$block_attributes['blogTitleFontColor'] : '';  
@@ -122,8 +132,18 @@ function gutenberg_examples_dynamic_render_callback( $block_attributes, $content
     $blogTitleLink          = $block_attributes['blogTitleLink'];
     $show_date              = $block_attributes['show_date'];
     $show_readmore          = $block_attributes['show_readmore'];
-    $titleFontSize          = $block_attributes['titleFontSize'] ? 'font-size:'.$block_attributes['titleFontSize'].'px,' : '';
-
+    $posts_per_page         = $block_attributes['posts_per_page'];
+    $pagination_type        = $block_attributes['pagination_type'];
+    $older_posts_label      = $block_attributes['older_posts_label'];
+    $newer_posts_label      = $block_attributes['newer_posts_label'];
+    $show_prev_next_buttons = $block_attributes['show_prev_next_buttons'];
+    $previous_label         = $block_attributes['previous_label'];
+    $next_label             = $block_attributes['next_label'];
+    $blb_orderby            = $block_attributes['blb_orderby'];
+    $blb_order              = $block_attributes['blb_order'];
+    // echo $posts_per_page;
+    // echo $blb_orderby;
+    // echo $blb_order;
     switch ($date_format) {
         case 'MM-DD-YY':
             $date_format = 'm-d-y';
@@ -149,8 +169,10 @@ function gutenberg_examples_dynamic_render_callback( $block_attributes, $content
     $blog_listing_query_args = array(
                                 'post_type'         => $block_attributes['selected_type'],
                                 'post_status'       => array('publish'),
-                                'posts_per_page'    => 3, 
+                                'posts_per_page'    => $posts_per_page, 
                                 'paged'             => get_query_var('paged'),
+                                'orderby'           => $blb_orderby,
+                                'order'             => $blb_order,
     );
     $blog_listing_query = new WP_Query( $blog_listing_query_args );
     // echo "<pre>";
@@ -158,9 +180,8 @@ function gutenberg_examples_dynamic_render_callback( $block_attributes, $content
     // echo "</pre>";exit;
     ob_start(); 
     ?>
-        <div>
-            <h2 class="text-center"><?php echo $block_title; ?></h2>
-			<div class="block-content container">
+        <div class="blb-main">
+			<div class="blb-container block-content container">
 				<div class="row">
                     <?php 
                         if ( $blog_listing_query->have_posts() ) { 
@@ -170,7 +191,7 @@ function gutenberg_examples_dynamic_render_callback( $block_attributes, $content
                                 $post_id        = get_the_ID();
                                 $title          = get_the_title( $post_id ) ? get_the_title( $post_id ) : '';
                                 $post_excerpt   = get_the_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : '';
-                                $post_content   = get_the_content( $post_id ) ? get_the_content( $post_id ) : '';
+                                $post_content   = get_the_content( $post_id ) ? wp_trim_words( get_the_content( $post_id ), 200 ) : '';
                                 $post_link      = get_the_permalink( $post_id ) ? get_the_permalink( $post_id ) : '';
                                 $post_date      = get_the_date( $date_format, $post_id ) ? get_the_date( $date_format, $post_id ) : '';
                                 $content_type   = ($block_attributes['show_excerpt_content'] == 'excerpt') ? $post_excerpt : $post_content;  
@@ -180,11 +201,11 @@ function gutenberg_examples_dynamic_render_callback( $block_attributes, $content
                             <?php 
                                 echo ($blogTitleLink) 
                                 ?
-                                '<a href="'.$post_link.'" class="post_link" target="'.$blogTitleLinkNewTab.'" rel="noopener">
-                                    <div class="title_wrapper">
-                                        <h5 id="main_header" '.$blogTitle_style.'>'.$title.'</h5>
-                                    </div>
-                                </a>'
+                                '<div class="title_wrapper">
+                                    <h5 id="main_header">
+                                        <a href="'.$post_link.'" class="post_link" target="'.$blogTitleLinkNewTab.'" rel="noopener" '.$blogTitle_style.'>'.$title.'</a>
+                                    </h5>
+                                </div>'
                                 : 
                                 '<div class="title_wrapper">
                                     <h5 id="main_header" '.$blogTitle_style.'>'.$title.'</h5>
@@ -212,17 +233,29 @@ function gutenberg_examples_dynamic_render_callback( $block_attributes, $content
                         } 
                         wp_reset_postdata();
                     ?>
-                    <div>
-                        <span><?php next_posts_link( 'Older posts', $blog_listing_query ->max_num_pages); ?></span>
-                        <span style="float:right"><?php previous_posts_link( 'Newer posts' ); ?></span>
-                    </div>
-                    <?php
-                        echo paginate_links( array(
-                            'current' => max( 1, get_query_var('paged') ),
-                            'total' => $blog_listing_query->max_num_pages,
-                            'mid_size' => 1
-                        ) );
-                    ?>
+                </div>
+                <div class="blb-fe-pagination">
+                    <?php 
+                        if( 'old_new' == $pagination_type ){ ?>
+                                <div class="blb-new-old-pagination">
+                                <span><?php next_posts_link( $older_posts_label, $blog_listing_query ->max_num_pages); ?></span>
+                                <span style="float:right"><?php previous_posts_link( $newer_posts_label ); ?></span>
+                            </div>
+                        <?php }
+                        else { ?>
+                            <div class="blb-num-pagination">
+                                <?php
+                                    echo paginate_links( array(
+                                        'current' => max( 1, get_query_var('paged') ),
+                                        'prev_next' => $show_prev_next_buttons,
+                                        'prev_text' => $previous_label,
+                                        'next_text' => $next_label,
+                                        'total' => $blog_listing_query->max_num_pages,
+                                        'mid_size' => 1
+                                    ) );
+                                ?>
+                            </div>
+                        <?php  } ?>
                 </div>
 			</div>
 		</div>

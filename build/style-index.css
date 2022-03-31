@@ -4,6 +4,12 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
+.blb-main {
+  max-width: 90% !important;
+  margin-right: 10px !important;
+  margin-left: 10px !important;
+}
+
 .blog-post-listing {
   background-color: white !important;
   padding: 10px 20px !important;
@@ -21,24 +27,38 @@
   flex-wrap: wrap;
 }
 
-.col-12 {
+.blb-container .col-12 {
   width: 100% !important;
+  margin-right: 0 !important;
 }
 
-.col-6 {
-  width: 48% !important;
+.blb-container .col-6 {
+  width: calc(50% - 40px) !important;
+  margin-right: 0 !important;
 }
 
-.col-4 {
-  width: 32% !important;
+.blb-container .col-4 {
+  width: calc(33.33% - 40px) !important;
+  margin-right: 0 !important;
 }
 
-.col-3 {
-  width: 24% !important;
+.blb-container .col-3 {
+  width: calc(25% - 40px) !important;
+  margin-right: 0 !important;
 }
 
-.text-center {
+.text-center,
+.blb-num-pagination {
   text-align: center;
+}
+
+@media (max-width: 767px) {
+  .blb-container .col-6,
+.blb-container .col-4,
+.blb-container .col-3 {
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
 }
 
 /*# sourceMappingURL=style-index.css.map*/
