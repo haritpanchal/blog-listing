@@ -26,7 +26,34 @@
   margin-right: 0px;
 }
 
+.blb-block-content .col-12 {
+  width: 100% !important;
+}
+
+.blb-block-content .col-6 {
+  width: 50% !important;
+  margin-right: 0 !important;
+}
+
+.blb-block-content .col-4 {
+  width: 33.33% !important;
+  margin-right: 0 !important;
+}
+
+.blb-block-content .col-3 {
+  width: 25% !important;
+  margin-right: 0 !important;
+}
+
 .text-center {
+  text-align: center;
+}
+
+.blb-right {
+  float: right;
+}
+
+.blb-num-pagination {
   text-align: center;
 }
 

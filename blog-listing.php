@@ -24,3 +24,5 @@ function create_block_blog_listing_block_init() {
 	register_block_type_from_metadata( __DIR__ );
 }
 add_action( 'init', 'create_block_blog_listing_block_init' );
+
+require_once plugin_dir_path( __FILE__ ) . 'src/blog-listing-data.php';
