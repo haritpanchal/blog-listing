@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name:       Blog Listing
- * Description:       Example block written with ESNext standard and JSX support – build step required.
- * Requires at least: 5.7
+ * Description:       Gutenberg Block to list posts and custom post types with additional features.
+ * Requires at least: 5.9.2
  * Requires PHP:      7.0
- * Version:           0.1.0
+ * Version:           1.0.0
  * Author:            <a href="https://profiles.wordpress.org/haritpanchal/">Harit Panchal</a>
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
