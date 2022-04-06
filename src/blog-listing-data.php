@@ -1,11 +1,6 @@
-
-  
 <?php
-/**
- * Plugin Name: Gutenberg examples dynamic
- */
 
- function gutenberg_examples_dynamic() {
+ function gutenberg_blog_listing_block() {
     
     wp_enqueue_style('blog_listing_block_style', plugins_url( 'style.scss', __FILE__ ) , array(), '0.1.0', 'all');
     register_block_type( 'create-block/blog-listing-block', array(
@@ -141,9 +136,7 @@ function blog_listing_block_callback( $block_attributes, $content ) {
     $next_label             = $block_attributes['next_label'];
     $blb_orderby            = $block_attributes['blb_orderby'];
     $blb_order              = $block_attributes['blb_order'];
-    // echo $posts_per_page;
-    // echo $blb_orderby;
-    // echo $blb_order;
+
     switch ($date_format) {
         case 'MM-DD-YY':
             $date_format = 'm-d-y';
@@ -175,9 +168,7 @@ function blog_listing_block_callback( $block_attributes, $content ) {
                                 'order'             => $blb_order,
     );
     $blog_listing_query = new WP_Query( $blog_listing_query_args );
-    // echo "<pre>";
-    // print_r($block_attributes);
-    // echo "</pre>";exit;
+    
     ob_start(); 
     ?>
         <div class="blb-main">
@@ -261,4 +252,4 @@ function blog_listing_block_callback( $block_attributes, $content ) {
 		</div>
     <?php return ob_get_clean();
 }
-add_action( 'init', 'gutenberg_examples_dynamic' );
+add_action( 'init', 'gutenberg_blog_listing_block' );

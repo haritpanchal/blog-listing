@@ -1,12 +1,12 @@
 === Blog Listing ===
 Contributors:      Harit Panchal
 Tags:              block
-Tested up to:      5.7.0
-Stable tag:        0.1.0
+Tested up to:      5.9.2
+Stable tag:        1.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Example block written with ESNext standard and JSX support – build step required.
+Gutenberg Block to list posts and custom post types with additional features.
 
 == Description ==
 
@@ -45,7 +45,7 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
-= 0.1.0 =
+= 1.0.0 =
 * Release
 
 == Arbitrary section ==
