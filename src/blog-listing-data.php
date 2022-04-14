@@ -187,10 +187,10 @@ function blog_listing_block_callback( $block_attributes, $content ) {
                                 $post_date      = get_the_date( $date_format, $post_id ) ? get_the_date( $date_format, $post_id ) : '';
                                 $content_type   = ($block_attributes['show_excerpt_content'] == 'excerpt') ? $post_excerpt : $post_content;  
                     ?>
-                    <div class="blog-post-listing <?php echo $column_class; ?>" <?php echo $blogDesc_style; ?> >
-                        <div class="inner-wrapp" data-index="<?php echo $post_id; ?>">
+                    <div class="blog-post-listing <?php echo esc_attr__( $column_class, 'blog-listing' ); ?>" <?php echo esc_attr__( $blogDesc_style, 'blog-listing' ); ?> >
+                        <div class="inner-wrapp" data-index="<?php echo esc_attr__( $post_id, 'blog-listing' ); ?>">
                             <?php 
-                                echo ($blogTitleLink) 
+                                echo esc_attr__( $blogTitleLink, 'blog-listing' )
                                 ?
                                 '<div class="title_wrapper">
                                     <h5 id="main_header">
@@ -198,17 +198,17 @@ function blog_listing_block_callback( $block_attributes, $content ) {
                                     </h5>
                                 </div>'
                                 : 
-                                '<div class="title_wrapper">
+                                '<div class="title_wtitle_wrapperrapper">
                                     <h5 id="main_header" '.$blogTitle_style.'>'.$title.'</h5>
                                 </div>';
                             ?>
-                            <?php echo ($show_date) ? '<p class="post_date">'.$post_date.'</p>' :  ''; ?>
-                            <div class="content main_content" <?php echo $blogDesc_style; ?>>
-                                <?php echo $content_type; ?>
+                            <?php echo esc_attr__( $show_date, 'blog-listing' ) ? '<p class="post_date">'.$post_date.'</p>' :  ''; ?>
+                            <div class="content main_content" <?php echo esc_attr__( $blogDesc_style, 'blog-listing' ); ?>>
+                                <?php echo esc_attr__( $content_type, 'blog-listing' ); ?>
                             </div>
                             
                             <?php 
-                                echo ($show_readmore) 
+                                echo esc_attr__( $show_readmore, 'listing' ) 
                                 ?
                                 '<a href="'.$post_link.'" class="post_link" target="'.$readmore_newtab.'" rel="noopener">
                                     '.$custom_readmore_text.'
