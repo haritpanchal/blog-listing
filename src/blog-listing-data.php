@@ -38,7 +38,7 @@
             ),
             'blogTitleLinkNewTab' => array(
                 'type'      => 'boolean',
-                'default'   => true,
+                'default'   => false,
             ),
             'show_excerpt_content' => array(
                 'type'      => 'string',
@@ -62,7 +62,7 @@
             ),
             'readmore_newtab' => array(
                 'type'      => 'boolean',
-                'default'   => true,
+                'default'   => false,
             ),
             'selected_type' => array(
                 'type'      => 'string',
@@ -187,31 +187,31 @@ function blog_listing_block_callback( $block_attributes, $content ) {
                                 $post_date      = get_the_date( $date_format, $post_id ) ? get_the_date( $date_format, $post_id ) : '';
                                 $content_type   = ($block_attributes['show_excerpt_content'] == 'excerpt') ? $post_excerpt : $post_content;  
                     ?>
-                    <div class="blog-post-listing <?php echo esc_attr__( $column_class, 'blog-listing' ); ?>" <?php echo esc_attr__( $blogDesc_style, 'blog-listing' ); ?> >
+                    <div class="blog-post-listing <?php echo esc_html__( $column_class, 'blog-listing' ); ?>" <?php echo esc_html__( $blogDesc_style, 'blog-listing' ); ?> >
                         <div class="inner-wrapp" data-index="<?php echo esc_attr__( $post_id, 'blog-listing' ); ?>">
                             <?php 
-                                echo esc_attr__( $blogTitleLink, 'blog-listing' )
+                                echo esc_html__( $blogTitleLink, 'blog-listing' )
                                 ?
                                 '<div class="title_wrapper">
                                     <h5 id="main_header">
-                                        <a href="'.$post_link.'" class="post_link" target="'.$blogTitleLinkNewTab.'" rel="noopener" '.$blogTitle_style.'>'.$title.'</a>
+                                        <a href="'.esc_url( $post_link ).'" class="post_link" target="'.esc_attr__( $blogTitleLinkNewTab, 'blog-listing' ).'" rel="noopener" '.esc_html__( $blogTitle_style, 'blog-listing' ).'>'.esc_html__( $title, 'blog-listing' ).'</a>
                                     </h5>
                                 </div>'
                                 : 
                                 '<div class="title_wtitle_wrapperrapper">
-                                    <h5 id="main_header" '.$blogTitle_style.'>'.$title.'</h5>
+                                    <h5 id="main_header" '.esc_attr__( $blogTitle_style, 'blog-listing' ).'>'.esc_attr__( $title, 'blog-listing' ).'</h5>
                                 </div>';
                             ?>
-                            <?php echo esc_attr__( $show_date, 'blog-listing' ) ? '<p class="post_date">'.$post_date.'</p>' :  ''; ?>
-                            <div class="content main_content" <?php echo esc_attr__( $blogDesc_style, 'blog-listing' ); ?>>
-                                <?php echo esc_attr__( $content_type, 'blog-listing' ); ?>
+                            <?php echo esc_html__( $show_date, 'blog-listing' ) ? '<p class="post_date">'.$post_date.'</p>' :  ''; ?>
+                            <div class="content main_content" <?php echo esc_html__( $blogDesc_style, 'blog-listing' ); ?>>
+                                <?php echo esc_html__( $content_type, 'blog-listing' ); ?>
                             </div>
                             
                             <?php 
-                                echo esc_attr__( $show_readmore, 'listing' ) 
+                                echo esc_html__( $show_readmore, 'listing' ) 
                                 ?
-                                '<a href="'.$post_link.'" class="post_link" target="'.$readmore_newtab.'" rel="noopener">
-                                    '.$custom_readmore_text.'
+                                '<a href="'.esc_url( $post_link ).'" class="post_link" target="'.esc_attr__( $readmore_newtab, 'blog-listing' ).'" rel="noopener">
+                                    '.esc_html__( $custom_readmore_text, 'blog-listing' ).'
                                 </a>'
                                 : 
                                 '';
