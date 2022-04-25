@@ -204,16 +204,16 @@ function blog_listing_block_callback( $block_attributes, $content ) {
                                 }
                             
                                 if($show_date){
-                                    echo '<p class="post_date">'.esc_attr__( $post_date, 'blog-listing' ).'</p>';
+                                    echo '<p class="post_date">'.esc_attr( $post_date, 'blog-listing' ).'</p>';
                                 }
                             ?>
-                            <div class="content main_content" <?php echo esc_attr__( $blogDesc_style, 'blog-listing' ); ?>>
-                                <?php echo esc_attr__( $content_type, 'blog-listing' ); ?>
+                            <div class="content main_content" <?php echo esc_attr( $blogDesc_style, 'blog-listing' ); ?>>
+                                <?php echo esc_attr( $content_type, 'blog-listing' ); ?>
                             </div>
                             
                             <?php 
                                 if($show_readmore){
-                                    echo '<a href="'.esc_url( $post_link ).'" class="post_link" target="'.esc_attr__( $readmore_newtab, 'blog-listing' ).'" rel="noopener">
+                                    echo '<a href="'.esc_url( $post_link ).'" class="post_link" target="'.esc_attr( $readmore_newtab, 'blog-listing' ).'" rel="noopener">
                                             '.esc_html__( $custom_readmore_text, 'blog-listing' ).'
                                         </a>';       
                                 }
