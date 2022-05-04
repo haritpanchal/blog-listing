@@ -204,10 +204,10 @@ function blog_listing_block_callback( $block_attributes, $content ) {
                                 }
                             
                                 if($show_date){
-                                    echo '<p class="post_date">'.__( $post_date, 'blog-listing' ).'</p>';
+                                    echo '<p class="post_date">'.esc_attr( $post_date ).'</p>';
                                 }
                             ?>
-                            <div class="content main_content" <?php echo __( $blogDesc_style, 'blog-listing' ); ?>>
+                            <div class="content main_content" <?php echo esc_attr( $blogDesc_style ); ?>>
                                 <?php echo esc_attr( $content_type, 'blog-listing' ); ?>
                             </div>
                             
