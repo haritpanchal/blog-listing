@@ -187,19 +187,19 @@ function blog_listing_block_callback( $block_attributes, $content ) {
                                 $post_date      = get_the_date( $date_format, $post_id ) ? get_the_date( $date_format, $post_id ) : '';
                                 $content_type   = ($block_attributes['show_excerpt_content'] == 'excerpt') ? $post_excerpt : $post_content;  
                     ?>
-                    <div class="blog-post-listing <?php echo esc_html( $column_class, 'blog-listing' ); ?>" <?php echo esc_html( $blogDesc_style, 'blog-listing' ); ?> >
-                        <div class="inner-wrapp" data-index="<?php echo esc_attr( $post_id, 'blog-listing' ); ?>">
+                    <div class="blog-post-listing <?php echo esc_html( $column_class ); ?>" <?php echo esc_html( $blogDesc_style ); ?> >
+                        <div class="inner-wrapp" data-index="<?php echo esc_attr( $post_id ); ?>">
                             <?php 
                                 if($blogTitleLink){
                                     echo '<div class="title_wrapper">
                                             <h5 id="main_header">
-                                                <a href="'.esc_url( $post_link ).'" class="post_link" target="'.esc_attr( $blogTitleLinkNewTab, 'blog-listing' ).'" rel="noopener" '.esc_html( $blogTitle_style, 'blog-listing' ).'>'.esc_html( $title, 'blog-listing' ).'</a>
+                                                <a href="'.esc_url( $post_link ).'" class="post_link" target="'.esc_attr( $blogTitleLinkNewTab ).'" rel="noopener" '.esc_html( $blogTitle_style ).'>'.esc_html( $title ).'</a>
                                             </h5>
                                         </div>';    
                                 }
                                 else{
                                     echo '<div class="title_wtitle_wrapperrapper">
-                                            <h5 id="main_header" '.esc_attr( $blogTitle_style, 'blog-listing' ).'>'.esc_attr( $title, 'blog-listing' ).'</h5>
+                                            <h5 id="main_header" '.esc_attr( $blogTitle_style ).'>'.esc_attr( $title ).'</h5>
                                         </div>';
                                 }
                             
@@ -208,13 +208,13 @@ function blog_listing_block_callback( $block_attributes, $content ) {
                                 }
                             ?>
                             <div class="content main_content" <?php echo esc_attr( $blogDesc_style ); ?>>
-                                <?php echo esc_attr( $content_type, 'blog-listing' ); ?>
+                                <?php echo esc_attr( $content_type ); ?>
                             </div>
                             
                             <?php 
                                 if($show_readmore){
-                                    echo '<a href="'.esc_url( $post_link ).'" class="post_link" target="'.esc_attr( $readmore_newtab, 'blog-listing' ).'" rel="noopener">
-                                            '.esc_html( $custom_readmore_text, 'blog-listing' ).'
+                                    echo '<a href="'.esc_url( $post_link ).'" class="post_link" target="'.esc_attr( $readmore_newtab ).'" rel="noopener">
+                                            '.esc_html( $custom_readmore_text ).'
                                         </a>';       
                                 }
                             ?>
