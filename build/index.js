@@ -785,7 +785,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])("cre
   /**
    * @see ./edit.js
    */
-  title: 'Blog Listing Block',
+  title: 'Custom Post Types Listing Block',
   description: "Gutenberg Block to list posts and custom post types with additional features.",
   icon: 'list-view',
   category: 'widgets',

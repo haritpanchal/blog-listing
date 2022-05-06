@@ -1,4 +1,4 @@
-=== Blog Listing ===
+=== Custom Post Types Listing Block ===
 Contributors:      Harit Panchal
 Tags:              block, gutenberg
 Tested up to:      5.9.3

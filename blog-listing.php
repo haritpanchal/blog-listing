@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Blog Listing
+ * Plugin Name:       Custom Post Types Listing Block
  * Description:       Gutenberg Block to list posts and custom post types with additional features.
  * Requires at least: 5.9.3
  * Requires PHP:      7.0

@@ -1,7 +1,7 @@
 {
 	"apiVersion": 2,
 	"name": "create-block/blog-listing",
-	"title": "Blog Listing Block",
+	"title": "Custom Post Types Listing Block",
 	"category": "widgets",
 	"icon": "list-view",
 	"description": "Gutenberg Block to list posts and custom post types.",
