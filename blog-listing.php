@@ -2,10 +2,11 @@
 /**
  * Plugin Name:       Blog Listing
  * Description:       Gutenberg Block to list posts and custom post types with additional features.
- * Requires at least: 5.9.2
+ * Requires at least: 5.9.3
  * Requires PHP:      7.0
  * Version:           1.0.0
- * Author:            <a href="https://profiles.wordpress.org/haritpanchal/">Harit Panchal</a>
+ * Author:            Harit Panchal
+ * Author URI: 		  https://profiles.wordpress.org/haritpanchal/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       blog-listing
