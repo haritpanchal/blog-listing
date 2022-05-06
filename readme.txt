@@ -1,7 +1,7 @@
 === Blog Listing ===
 Contributors:      Harit Panchal
-Tags:              block
-Tested up to:      5.9.2
+Tags:              block, gutenberg
+Tested up to:      5.9.3
 Stable tag:        1.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -10,46 +10,37 @@ Gutenberg Block to list posts and custom post types with additional features.
 
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
-
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+Blog listing plugin is the best Gutenberg WordPress plugin to display custom posts on your website. The plugin consists of one Gutenberg block. It hase many feature like pagination, sorting, date formats etc.
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
-
-e.g.
-
-1. Upload the plugin files to the `/wp-content/plugins/blog-listing` directory, or install the plugin through the WordPress plugins screen directly.
+1. Upload the plugin files to the `/wp-content/plugins/custom-posttype-listing-block` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
 
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= Does this plugin supports cusom post types? =
 
-An answer to that question.
+Yes.
 
-= What about foo bar? =
+= Does this plugin supports pagination and sorting methods? =
 
-Answer to foo bar dilemma.
+Yes.
+
+== Features ==
+
+1. List posts from custom post types.
+2. Two types of paginations format (Old/New and Number ).
+3. Custom pagination labels.
+4. Sort by alphabet, date.
+5. Grid view supported.
+
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
-
-== Changelog ==
-
-= 1.0.0 =
-* Release
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.
+1. Design Panel
+2. Content Panel
+3. Pagination Panel
+4. Number Pagination
+5. Old/New Pagination
