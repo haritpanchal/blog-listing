@@ -10,7 +10,7 @@ Gutenberg Block to list posts and custom post types with additional features.
 
 == Description ==
 
-Blog listing plugin is the best Gutenberg WordPress plugin to display custom posts on your website. The plugin consists of one Gutenberg block. It hase many feature like pagination, sorting, date formats etc.
+Custom Post Types listing plugin is the best Gutenberg WordPress plugin to display custom posts on your website. The plugin consists of one Gutenberg block. It hase many feature like pagination, sorting, date formats etc.
 
 == Installation ==
 
